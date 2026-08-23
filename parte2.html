@@ -362,20 +362,54 @@ boton_guardar.config(state=NORMAL)</pre>
   </div>
 
   <div class="card panel" id="tl-lambda">
-    <h3>lambda: funciones de un solo uso</h3>
-    <p><code>command=</code> no acepta enviar datos entre parentesis... salvo
-    que envuelvas la llamada en una funcion anonima:</p>
-<pre class="codigo">boton1 = <span class="fn">Button</span>(frame2, text=<span class="st">"1"</span>, command=lambda: <span class="fn">mostrar_tabla</span>(<span class="nu">1</span>))
-boton7 = <span class="fn">Button</span>(frame2, text=<span class="st">"7"</span>, command=lambda: <span class="fn">mostrar_tabla</span>(<span class="nu">7</span>))</pre>
+    <h3>lambda: una funcion escrita en una linea</h3>
+
+    <p class="intro"><strong>Paso 0 · como trabaja command.</strong> En un
+    boton, <code>command=saludar</code> va SIN parentesis: no llamamos a la
+    funcion ahora, le entregamos a Tkinter <em>su direccion</em> para que la
+    llame mas tarde, recien cuando haya un click.</p>
+
+    <p><strong>El problema:</strong> nuestros botones necesitan mandar el
+    numero de tabla. Pero esto...</p>
+<pre class="codigo">Button(frame2, text=<span class="st">"7"</span>, command=<span class="fn">mostrar_tabla</span>(<span class="nu">7</span>))  <span class="cm"># MAL: los parentesis ejecutan YA</span></pre>
+    <p>...ejecuta la funcion <strong>al crear el boton</strong>, no al hacer
+    click. Y sin parentesis (<code>command=mostrar_tabla</code>) falta el
+    numero y da error en el click. Hace falta algo intermedio: una funcion que
+    guarde adentro la llamada con su numero. Eso es lambda.</p>
+
+    <h3>La sintaxis, comparada con def</h3>
+<pre class="codigo"><span class="kw">def</span> <span class="fn">doble</span>(x):                <span class="cm"># funcion normal</span>
+    <span class="kw">return</span> x * <span class="nu">2</span>
+
+<span class="kw">lambda</span> x: x * <span class="nu">2</span>              <span class="cm"># EXACTAMENTE lo mismo, en una linea</span></pre>
+    <table class="datos">
+      <tr><th>Pedazo</th><th>Significado</th><th>Equivalente en def</th></tr>
+      <tr><td><code>lambda</code></td><td>"aca empieza una mini-funcion sin nombre"</td><td><code>def nombre():</code></td></tr>
+      <tr><td><code>x</code></td><td>lo que recibe</td><td>el <code>x</code> de los parentesis</td></tr>
+      <tr><td><code>: x * 2</code></td><td>lo unico que hace y devuelve</td><td><code>return x * 2</code></td></tr>
+    </table>
+
+    <h3>Aplicado al boton de LasTablas</h3>
+<pre class="codigo">boton7 = Button(frame2, text=<span class="st">"7"</span>, command=<span class="kw">lambda</span>: <span class="fn">mostrar_tabla</span>(<span class="nu">7</span>))</pre>
+    <ol style="padding-left:1.3rem; font-size:.93rem">
+      <li>Python crea la mini-funcion <code>lambda: mostrar_tabla(7)</code> y la deja guardada en <code>command</code>. Todavia NO se ejecuta nada.</li>
+      <li>Haces click en el "7".</li>
+      <li>Tkinter llama a esa mini-funcion (por eso funciona sin parentesis: Tkinter la invoca vacia).</li>
+      <li>La mini-funcion corre su unica linea: <code>mostrar_tabla(7)</code>. Recien AHORA se dibuja la tabla del 7.</li>
+    </ol>
     <table class="datos">
       <tr><th>Forma</th><th>Que pasa</th></tr>
       <tr><td><code>command=mostrar_tabla</code></td><td>falta el numero n: error al hacer click</td></tr>
       <tr><td><code>command=mostrar_tabla(7)</code></td><td>se ejecuta YA al crear el boton (mal)</td></tr>
       <tr><td><code>command=lambda: mostrar_tabla(7)</code></td><td>espera el click Y manda el 7 (correcto)</td></tr>
     </table>
-    <div class="okbox"><strong>Lectura:</strong> lambda crea una mini-funcion
-    sin nombre que solo dice "llama a mostrar_tabla con 7". Es la valija que
-    guarda la llamada para mas tarde.</div>
+    <div class="okbox"><strong>Idea clave:</strong> lambda no ejecuta nada por
+    si sola: fabrica la funcion y la deja lista, como un papelito que dice
+    "cuando te llamen, mostra la tabla del 7". Tkinter guarda el papelito y lo
+    lee en cada click.</div>
+    <div class="alerta"><strong>Limite:</strong> lambda admite UNA sola
+    expresion (una linea). Si necesitas varias instrucciones o un if complejo,
+    usa <code>def</code> normal.</div>
   </div>
 </section>
 
@@ -487,9 +521,12 @@ pygame.mixer.music.play(-<span class="nu">1</span>)                 <span class=
 <section id="basedatos">
   <h2><span class="num">7.</span> Formulario con base de datos (MySQL)</h2>
   <p class="intro">Meta final: una ventana donde cargar un alumno (nombre +
-  curso) y guardarlo en MySQL. Tres piezas: <strong>ttk</strong> para el
-  Combobox, <strong>messagebox</strong> para avisos, y
-  <strong>mysql.connector</strong> para hablar con la base.</p>
+  curso), <strong>ENVIARLO</strong> a MySQL y despues <strong>MOSTRAR</strong>
+  lo guardado. El flujo completo son tres verbos: <strong>CONECTAR</strong>
+  (abrir la puerta), <strong>ENVIAR</strong> (INSERT + commit) y
+  <strong>MOSTRAR</strong> (SELECT + fetchall). Herramientas:
+  <strong>ttk</strong> para el Combobox, <strong>messagebox</strong> para
+  avisos, y <strong>mysql.connector</strong> para hablar con la base.</p>
 
 <pre class="codigo"><span class="kw">from</span> tkinter <span class="kw">import</span> ttk             <span class="cm"># Widgets mejorados: el Combobox (lista desplegable)</span>
 <span class="kw">from</span> tkinter <span class="kw">import</span> messagebox      <span class="cm"># Ventanitas de aviso: showinfo, showwarning, showerror</span>
@@ -535,6 +572,38 @@ pygame.mixer.music.play(-<span class="nu">1</span>)                 <span class=
 <pre class="codigo">combo_curso = ttk.<span class="fn">Combobox</span>(ventana, values=[<span class="st">"1A"</span>, <span class="st">"2A"</span>, <span class="st">"3A"</span>, <span class="st">"4A"</span>])
 combo_curso.current(<span class="nu">0</span>)          <span class="cm"># preselecciona el primero</span>
 combo_curso.pack()</pre>
+</div>
+
+<div class="card">
+<h3>MOSTRAR lo guardado (SELECT)</h3>
+<p class="intro">Mismo camino que ENVIAR, con distinto final: INSERT cambia
+datos y necesita <code>commit()</code>; SELECT solo consulta y responde con
+<code>fetchall()</code>.</p>
+<pre class="codigo"><span class="kw">def</span> <span class="fn">mostrar</span>():
+    <span class="kw">try</span>:
+        cnx = <span class="fn">conectar</span>()
+        cursor = cnx.cursor()
+        cursor.<span class="fn">execute</span>(<span class="st">"SELECT nombre, curso FROM alumnos"</span>)
+        filas = cursor.<span class="fn">fetchall</span>()            <span class="cm"># devuelve LISTA DE TUPLAS</span>
+        <span class="cm"># ej: filas = [("Ana", "1A"), ("Bruno", "2A")]</span>
+
+        texto_alumnos.delete(<span class="st">"1.0"</span>, END)      <span class="cm"># limpia antes de escribir</span>
+        <span class="kw">for</span> fila <span class="kw">in</span> filas:                    <span class="cm"># cada fila es una tupla</span>
+            texto_alumnos.insert(END, <span class="fn">f"{fila[0]} - {fila[1]}\n"</span>)
+
+        <span class="kw">if</span> <span class="fn">len</span>(filas) == <span class="nu">0</span>:
+            messagebox.<span class="fn">showinfo</span>(<span class="st">"Sin datos"</span>, <span class="st">"Todavia no hay alumnos"</span>)
+        cnx.close()
+    <span class="kw">except</span>:
+        messagebox.<span class="fn">showerror</span>(<span class="st">"Error"</span>, <span class="st">"No se pudo leer la base"</span>)</pre>
+  <table class="datos">
+    <tr><th>Herramienta</th><th>Que hace</th></tr>
+    <tr><td><code>cursor.execute(sql)</code></td><td>envia el SELECT (sin tupla de valores: no hay datos que proteger)</td></tr>
+    <tr><td><code>cursor.fetchall()</code></td><td>trae TODAS las filas juntas, como lista de tuplas</td></tr>
+    <tr><td><code>fila[0]</code> / <code>fila[1]</code></td><td>campo por posicion: el orden es el MISMO que se pidio en el SELECT</td></tr>
+  </table>
+  <p>Su boton: <code>Button(text="Mostrar", command=mostrar)</code> — sin
+  parentesis, como siempre.</p>
 </div>
 
   <table class="datos">

@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guia Interactiva · Programacion Estructurada en Python · 5to</title>
+<style>
+:root{
+  --bg:#0b1220; --panel:#121b30; --panel2:#0d1526; --codigo:#080f1d;
+  --borde:#253352; --texto:#e2e8f0; --mut:#93a4bd;
+  --azul:#38bdf8; --verde:#34d399; --naranja:#fb923c; --rojo:#f87171;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--texto);
+  font-family:'Segoe UI',system-ui,Arial,sans-serif; line-height:1.55;
+}
+main{max-width:1080px; margin:0 auto; padding:1rem 1rem 3rem}
+
+/* ---------- Encabezado ---------- */
+header.top{
+  background:linear-gradient(135deg,#101c36,#0b1220);
+  border-bottom:1px solid var(--borde); padding:1.6rem 1rem;
+}
+header.top .inner{max-width:1080px; margin:0 auto}
+h1{margin:.1rem 0 .3rem; font-size:1.65rem}
+.sub{color:var(--mut); margin:0}
+.badges{display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.8rem}
+.badge{
+  font-size:.78rem; font-weight:600; letter-spacing:.03em;
+  padding:.28rem .75rem; border-radius:999px; border:1px solid var(--borde);
+  background:#16213c;
+}
+.badge.azul{color:var(--azul)} .badge.verde{color:var(--verde)}
+.badge.naranja{color:var(--naranja)}
+
+/* ---------- Barra de navegacion ---------- */
+nav{
+  position:sticky; top:0; z-index:50; display:flex; flex-wrap:wrap; gap:.45rem;
+  padding:.6rem 1rem; background:rgba(11,18,32,.92); backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--borde);
+}
+nav a{
+  color:var(--mut); text-decoration:none; font-size:.88rem; font-weight:600;
+  padding:.35rem .8rem; border-radius:999px; border:1px solid transparent;
+}
+nav a:hover{color:var(--texto); border-color:var(--borde)}
+nav a.activo{color:var(--azul); border-color:var(--azul)}
+
+/* ---------- Tarjetas y secciones ---------- */
+section{margin-top:2.2rem}
+h2{font-size:1.3rem; margin:0 0 .4rem}
+h2 .num{color:var(--azul)}
+h3{font-size:1.02rem; margin:0 0 .5rem}
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:14px}
+.card{
+  background:var(--panel); border:1px solid var(--borde);
+  border-radius:14px; padding:1rem 1.1rem; margin:.8rem 0;
+}
+.card h3{margin-top:0}
+.intro{color:var(--mut)}
+
+/* ---------- Codigo ---------- */
+pre.codigo{
+  background:var(--codigo); border:1px solid var(--borde); border-radius:10px;
+  padding:.85rem 1rem; overflow-x:auto; font-size:.86rem; line-height:1.5;
+  font-family:Consolas,'Courier New',monospace; margin:.6rem 0;
+}
+code{
+  font-family:Consolas,'Courier New',monospace; font-size:.87em;
+  background:var(--codigo); border:1px solid var(--borde);
+  border-radius:6px; padding:.06em .35em; color:var(--naranja);
+}
+pre.codigo code{background:none; border:none; padding:0; color:inherit}
+.kw{color:var(--azul); font-weight:600}
+.fn{color:var(--verde)}
+.st{color:var(--naranja)}
+.nu{color:var(--verde)}
+.cm{color:#64748b; font-style:italic}
+
+/* ---------- Tablas ---------- */
+table.datos{width:100%; border-collapse:collapse; font-size:.9rem; margin:.6rem 0}
+table.datos th{
+  text-align:left; color:var(--azul); border-bottom:2px solid var(--borde);
+  padding:.45rem .6rem;
+}
+table.datos td{border-bottom:1px solid var(--borde); padding:.45rem .6rem; vertical-align:top}
+table.datos tr:nth-child(even){background:#0f1930}
+
+/* ---------- Buenas practicas / alertas ---------- */
+.buenas{
+  border-left:4px solid var(--naranja); background:rgba(251,146,60,.08);
+  border-radius:0 10px 10px 0; padding:.75rem 1rem; margin:.8rem 0; font-size:.92rem;
+}
+.buenas strong{color:var(--naranja)}
+.alerta{
+  border-left:4px solid var(--rojo); background:rgba(248,113,113,.08);
+  border-radius:0 10px 10px 0; padding:.75rem 1rem; margin:.8rem 0; font-size:.92rem;
+}
+.alerta strong{color:var(--rojo)}
+.okbox{
+  border-left:4px solid var(--verde); background:rgba(52,211,153,.08);
+  border-radius:0 10px 10px 0; padding:.75rem 1rem; margin:.8rem 0; font-size:.92rem;
+}
+.okbox strong{color:var(--verde)}
+
+/* ---------- Pestañas teoria ---------- */
+.tabs{display:flex; flex-wrap:wrap; gap:.4rem; margin:.8rem 0 0}
+.tabs button{
+  background:var(--panel); color:var(--mut); border:1px solid var(--borde);
+  border-radius:999px; padding:.45rem 1rem; cursor:pointer; font-weight:600; font-size:.88rem;
+}
+.tabs button:hover{color:var(--texto)}
+.tabs button.on{background:var(--azul); border-color:var(--azul); color:#06121f}
+.panel{display:none}
+.panel.on{display:block}
+
+/* ---------- Practica interactiva ---------- */
+.ejercicio{border-color:#20305a}
+.enun{margin:.2rem 0 .6rem}
+.zona-resp{margin:.6rem 0}
+input.resp{
+  background:var(--codigo); color:var(--texto); border:1px solid var(--borde);
+  border-radius:8px; padding:.42rem .6rem; font-family:Consolas,monospace;
+  font-size:.85rem; width:min(220px,90%);
+}
+input.resp.okk{border-color:var(--verde); color:var(--verde)}
+input.resp.mall{border-color:var(--rojo); color:var(--rojo)}
+button.btn{
+  background:var(--verde); color:#06121f; font-weight:700; border:none;
+  border-radius:9px; padding:.5rem 1.1rem; cursor:pointer; font-size:.9rem;
+}
+button.btn.sec{background:#26344f; color:var(--texto)}
+button.opcion{
+  display:block; width:100%; text-align:left; margin:.3rem 0;
+  background:var(--panel2); color:var(--texto); border:1px solid var(--borde);
+  border-radius:9px; padding:.5rem .8rem; cursor:pointer;
+  font-family:Consolas,monospace; font-size:.85rem;
+}
+button.opcion.okk{border-color:var(--verde); color:var(--verde); font-weight:700}
+button.opcion.mall{border-color:var(--rojo); color:var(--rojo)}
+.feedback{font-size:.9rem; font-weight:600; min-height:1.3rem; margin-top:.4rem}
+.feedback.ok{color:var(--verde)} .feedback.mal{color:var(--rojo)}
+details.solu{margin-top:.5rem; font-size:.9rem}
+details.solu summary{cursor:pointer; color:var(--azul); font-weight:600}
+
+/* ---------- Marcador ---------- */
+.marcador{
+  position:sticky; bottom:0; z-index:40; background:rgba(11,18,32,.95);
+  border-top:1px solid var(--borde); padding:.55rem 1rem;
+}
+.marcador .inner{max-width:1080px; margin:0 auto; display:flex; align-items:center; gap:.9rem}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="inner">
+    <h1>Guia Interactiva · Programacion Estructurada en Python</h1>
+    <p class="sub">Materia: Programacion &middot; 5to Año &middot; Escuela Tecnica</p>
+    <div class="badges">
+      <span class="badge azul">PYTHON 3</span>
+      <span class="badge verde">LOGICA Y FUNCIONES</span>
+      <span class="badge naranja">INTERFAZ TKINTER</span>
+      <span class="badge">PRACTICA CON CORRECCION AUTOMATICA</span>
+    </div>
+  </div>
+</header>
+
+<nav id="barranav">
+  <a href="#variables">1 · Variables</a>
+  <a href="#fundamentos">2 · Decisiones</a>
+  <a href="#ciclos">3 · Ciclos</a>
+  <a href="#datos">4 · Entrada/Salida</a>
+  <a href="#funciones">5 · Funciones</a>
+  <a href="#tkinter">6 · Tkinter</a>
+  <a href="#practica">7 · Practica</a>
+</nav>
+
+<main>
+
+<!-- ==================================================== -->
+<section id="variables">
+  <h2><span class="num">1.</span> Variables y tipos de datos</h2>
+  <p class="intro">Una variable es una <strong>caja etiquetada</strong> donde el
+  programa guarda un dato para usarlo despues. El signo <code>=</code> no significa
+  "igual" como en matematica: significa <em>guarda esto aca adentro</em>.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Asignacion</h3>
+<pre class="codigo">nombre = <span class="st">"Ana"</span>       <span class="cm"># str   (texto)</span>
+edad = <span class="nu">15</span>           <span class="cm"># int   (entero)</span>
+altura = <span class="nu">1.62</span>        <span class="cm"># float (decimal)</span>
+aprobado = <span class="kw">True</span>     <span class="cm"># bool  (verdadero/falso)</span></pre>
+      <p class="intro">La caja puede cambiar de contenido en cualquier momento:
+      <code>edad = edad + 1</code> toma lo que habia, le suma 1 y vuelve a guardar.</p>
+    </div>
+    <div class="card">
+      <h3>Reglas para los nombres</h3>
+      <table class="datos">
+        <tr><th>Regla</th><th>Ejemplo mal</th><th>Ejemplo bien</th></tr>
+        <tr><td>sin espacios</td><td><code>mi edad</code></td><td><code>mi_edad</code></td></tr>
+        <tr><td>no arranca con numero</td><td><code>2do_parcial</code></td><td><code>parcial_2</code></td></tr>
+        <tr><td>distingue mayusculas</td><td colspan="2"><code>Nota</code> y <code>nota</code> son DOS variables distintas</td></tr>
+        <tr><td>descriptivo &gt; corto</td><td><code>x</code></td><td><code>precio_final</code></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="buenas"><strong>Buena practica:</strong> en Python el tipo se
+  deduce solo (no se declara como en otros lenguajes), pero conviene que una
+  variable guarde siempre el mismo tipo de dato para no confundirse.</div>
+</section>
+
+<!-- ==================================================== -->
+<section id="fundamentos">
+  <h2><span class="num">2.</span> Toma de decisiones: if / elif / else</h2>
+  <p class="intro">Un programa casi nunca hace siempre lo mismo: tiene que
+  <strong>decidir</strong>. Pensalo como una bifurcacion en el camino: segun una
+  condicion (verdadero o falso), el programa toma un camino u otro.</p>
+
+  <div class="tabs" data-tabs="t-fund">
+    <button class="on" data-p="pf-sintaxis">Sintaxis</button>
+    <button data-p="pf-ejemplo">Ejemplo aplicado</button>
+    <button data-p="pf-flujo">Diagrama de flujo</button>
+    <button data-p="pf-errores">Errores tipicos</button>
+  </div>
+
+  <div class="card panel on" id="pf-sintaxis">
+    <h3>Sintaxis general</h3>
+<pre class="codigo"><span class="kw">if</span> condicion:
+    <span class="cm"># se ejecuta solo si la condicion es True</span>
+    instrucciones
+<span class="kw">elif</span> otra_condicion:
+    <span class="cm"># se ejecuta si la primera fue False y esta es True</span>
+    instrucciones
+<span class="kw">else</span>:
+    <span class="cm"># si nada anterior se cumplio</span>
+    instrucciones</pre>
+    <table class="datos">
+      <tr><th>Operador</th><th>Significado</th><th>Ejemplo que da True</th></tr>
+      <tr><td><code>==</code></td><td>igual a</td><td><code>edad == 15</code></td></tr>
+      <tr><td><code>!=</code></td><td>distinto a</td><td><code>nombre != "Ana"</code></td></tr>
+      <tr><td><code>&lt; &nbsp; &gt;</code></td><td>menor / mayor</td><td><code>nota &lt; 6</code></td></tr>
+      <tr><td><code>&lt;= &nbsp;&gt;=</code></td><td>menor o igual / mayor o igual</td><td><code>nota &gt;= 6</code></td></tr>
+      <tr><td><code>and</code></td><td>las dos condiciones</td><td><code>nota &gt;= 6 and asistio</code></td></tr>
+      <tr><td><code>or</code></td><td>al menos una</td><td><code>dias == "sabado" or dias == "domingo"</code></td></tr>
+      <tr><td><code>not</code></td><td>niega la condicion</td><td><code>not aprobado</code></td></tr>
+    </table>
+  </div>
+
+  <div class="card panel" id="pf-ejemplo">
+    <h3>Ejemplo: aprobo o reprobo</h3>
+<pre class="codigo">nota = <span class="nu">8</span>
+
+<span class="kw">if</span> nota &gt;= <span class="nu">6</span>:
+    <span class="fn">print</span>(<span class="st">"Aprobo"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="st">"Reprobo"</span>)</pre>
+    <p>Con varias salidas posibles conviene encadenar <code>elif</code>:</p>
+<pre class="codigo"><span class="kw">if</span> nota &gt;= <span class="nu">8</span>:
+    <span class="fn">print</span>(<span class="st">"Sobresaliente"</span>)
+<span class="kw">elif</span> nota &gt;= <span class="nu">6</span>:
+    <span class="fn">print</span>(<span class="st">"Aprobo"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="st">"Reprobo"</span>)</pre>
+    <div class="okbox"><strong>Ojo:</strong> Python evalua de arriba hacia abajo y
+    entra solo al primer bloque que cumpla. Con nota 8 nunca llega al
+    <code>elif</code>.</div>
+  </div>
+
+  <div class="card panel" id="pf-flujo">
+    <h3>Diagrama de flujo del if / else</h3>
+    <svg viewBox="0 0 420 190" role="img" aria-label="Diagrama if else" style="max-width:430px;width:100%">
+      <polygon points="210,10 300,55 210,100 120,55" fill="none" stroke="#fb923c" stroke-width="2"/>
+      <text x="210" y="59" text-anchor="middle" fill="#e2e8f0" font-size="12">condicion?</text>
+      <line x1="300" y1="55" x2="370" y2="55" stroke="#34d399" stroke-width="2"/>
+      <text x="330" y="47" text-anchor="middle" fill="#34d399" font-size="11">True</text>
+      <rect x="310" y="110" width="120" height="40" rx="8" fill="none" stroke="#34d399" stroke-width="2"/>
+      <text x="370" y="134" text-anchor="middle" fill="#e2e8f0" font-size="11">bloque SI</text>
+      <line x1="370" y1="55" x2="370" y2="110" stroke="#34d399" stroke-width="2"/>
+      <line x1="120" y1="55" x2="50" y2="55" stroke="#f87171" stroke-width="2"/>
+      <text x="85" y="47" text-anchor="middle" fill="#f87171" font-size="11">False</text>
+      <line x1="50" y1="55" x2="50" y2="130" stroke="#f87171" stroke-width="2"/>
+      <line x1="50" y1="130" x2="115" y2="130" stroke="#f87171" stroke-width="2"/>
+      <text x="82" y="134" text-anchor="middle" fill="#e2e8f0" font-size="11">bloque NO</text>
+      <line x1="210" y1="100" x2="210" y2="160" stroke="#93a4bd" stroke-width="2"/>
+      <line x1="50" y1="160" x2="370" y2="160" stroke="#93a4bd" stroke-width="2"/>
+      <text x="210" y="180" text-anchor="middle" fill="#93a4bd" font-size="11">el programa sigue</text>
+    </svg>
+    <p class="intro">El rombo es la pregunta; los caminos son los bloques
+    <code>if</code> (SI) y <code>else</code> (NO). Siempre se vuelve al mismo punto.</p>
+  </div>
+
+  <div class="card panel" id="pf-errores">
+    <h3>Errores tipicos</h3>
+    <table class="datos">
+      <tr><th>Mal</th><th>Bien</th><th>Por que</th></tr>
+      <tr><td><code>if edad = 15:</code></td><td><code>if edad == 15:</code></td><td><code>=</code> asigna, <code>==</code> compara</td></tr>
+      <tr><td><code>if edad &gt; 15</code></td><td><code>if edad &gt; 15:</code></td><td>faltan los dos puntos</td></tr>
+      <tr><td>instrucciones sin sangria</td><td>4 espacios de sangria</td><td>en Python la sangria define el bloque</td></tr>
+    </table>
+    <div class="alerta"><strong>Cuidado:</strong> mezclar tabuladores y espacios
+    da error. Configura el editor para insertar 4 espacios con la tecla Tab.</div>
+  </div>
+</section>
+
+<!-- ==================================================== -->
+<section id="ciclos">
+  <h2><span class="num">3.</span> Ciclos: while, for, contador y acumulador</h2>
+  <p class="intro">El <code>while</code> repite un bloque <strong>mientras</strong>
+  una condicion siga siendo verdadera. Analogia: <em>mientras llueva, quedate
+  bajo el techo; cuando pare, sali.</em></p>
+
+  <div class="tabs" data-tabs="t-ciclo">
+    <button class="on" data-p="pc-sintaxis">Sintaxis while</button>
+    <button data-p="pc-formas">Contador y centinela</button>
+    <button data-p="pc-for">for y range</button>
+    <button data-p="pc-ca">Contador y acumulador</button>
+    <button data-p="pc-break">break y menu</button>
+    <button data-p="pc-flujo">Diagrama de flujo</button>
+  </div>
+
+  <div class="card panel on" id="pc-sintaxis">
+<pre class="codigo"><span class="kw">while</span> condicion:
+    instrucciones          <span class="cm"># se repiten mientras la condicion sea True</span></pre>
+    <div class="okbox"><strong>Idea clave:</strong> algo <em>dentro</em> del ciclo
+    tiene que cambiar para que la condicion en algun momento sea False. Si nada
+    cambia: ciclo infinito.</div>
+  </div>
+
+  <div class="card panel" id="pc-formas">
+    <h3>Forma 1: con contador (sabes cuantas vueltas)</h3>
+<pre class="codigo">i = <span class="nu">1</span>
+<span class="kw">while</span> i &lt;= <span class="nu">5</span>:
+    <span class="fn">print</span>(<span class="st">"Vuelta"</span>, i)
+    i = i + <span class="nu">1</span>            <span class="cm"># sin esta linea: bucle infinito</span></pre>
+    <h3>Forma 2: con centinela (no sabes cuantas vueltas)</h3>
+<pre class="codigo">clave = <span class="st">""</span>
+<span class="kw">while</span> clave != <span class="st">"1234"</span>:
+    clave = <span class="fn">input</span>(<span class="st">"Clave: "</span>)
+<span class="fn">print</span>(<span class="st">"Acceso permitido"</span>)</pre>
+  </div>
+
+  <div class="card panel" id="pc-for">
+    <h3>for: cuando sabes cuantas vueltas</h3>
+<pre class="codigo"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nu">1</span>, <span class="nu">11</span>):
+    <span class="fn">print</span>(<span class="fn">f"7 x {i} = {7*i}"</span>)   <span class="cm"># la tabla del 7, completa</span></pre>
+    <table class="datos">
+      <tr><th>Escritura</th><th>Valores que genera i</th></tr>
+      <tr><td><code>range(5)</code></td><td>0, 1, 2, 3, 4 &nbsp;(arranca en 0)</td></tr>
+      <tr><td><code>range(1, 6)</code></td><td>1, 2, 3, 4, 5 &nbsp;(el final NUNCA se incluye)</td></tr>
+      <tr><td><code>range(0, 10, 2)</code></td><td>0, 2, 4, 6, 8 &nbsp;(tercer dato = paso)</td></tr>
+    </table>
+    <table class="datos">
+      <tr><th></th><th>while</th><th>for + range</th></tr>
+      <tr><td>Cuando usarlo</td><td>repeticion condicionada (no sabes cuantas veces)</td><td>cantidad conocida de vueltas</td></tr>
+      <tr><td>Ejemplo</td><td>menu hasta elegir SALIR</td><td>las tablas del 1 al 10</td></tr>
+    </table>
+  </div>
+
+  <div class="card panel" id="pc-ca">
+    <h3>Contador y acumulador: dos cajas que crecen en el ciclo</h3>
+    <table class="datos">
+      <tr><th></th><th>Contador</th><th>Acumulador</th></tr>
+      <tr><td>Arranca en</td><td>0 (o 1)</td><td>0</td></tr>
+      <tr><td>Que suma</td><td>siempre 1</td><td>un valor que cambia</td></tr>
+      <tr><td>Sirve para</td><td>contar vueltas o casos</td><td>sumar totales</td></tr>
+      <tr><td>Ejemplo mental</td><td>"voy por el alumno 25"</td><td>"ya junte $4300"</td></tr>
+    </table>
+<pre class="codigo">total = <span class="nu">0</span>                          <span class="cm"># acumulador, arranca vacio</span>
+aprobados = <span class="nu">0</span>                      <span class="cm"># contador</span>
+
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nu">3</span>):
+    nota = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st">"Nota: "</span>))
+    total = total + nota           <span class="cm"># acumula: suma CADA nota</span>
+    <span class="kw">if</span> nota &gt;= <span class="nu">6</span>:
+        aprobados = aprobados + <span class="nu">1</span>  <span class="cm"># cuenta UNO mas</span>
+
+<span class="fn">print</span>(<span class="st">"Promedio:"</span>, total / <span class="nu">3</span>)
+<span class="fn">print</span>(<span class="st">"Aprobados:"</span>, aprobados)</pre>
+    <div class="alerta"><strong>Error clasico:</strong> olvidar inicializar antes
+    del ciclo. Si <code>total = 0</code> esta DENTRO del for, se borra en cada
+    vuelta y al final vale solo la ultima nota.</div>
+  </div>
+
+  <div class="card panel" id="pc-break">
+    <h3>break: corta el ciclo en el momento</h3>
+<pre class="codigo"><span class="kw">while</span> <span class="kw">True</span>:              <span class="cm"># bucle "infinito" a proposito</span>
+    opcion = <span class="fn">input</span>(<span class="st">"Opcion (S para salir): "</span>)
+    <span class="kw">if</span> opcion == <span class="st">"S"</span>:
+        <span class="kw">break</span>             <span class="cm"># abandona el while aca mismo</span>
+    <span class="fn">print</span>(<span class="st">"Elegiste:"</span>, opcion)
+<span class="fn">print</span>(<span class="st">"Fin del programa"</span>)</pre>
+    <div class="buenas"><strong>Buena practica:</strong> el patron
+    <code>while True</code> + <code>break</code> es el estandar para menus.
+    Deja la condicion de salida junta con la lectura del dato.</div>
+  </div>
+
+  <div class="card panel" id="pc-flujo">
+    <h3>Diagrama de flujo del while</h3>
+    <svg viewBox="0 0 420 230" role="img" aria-label="Diagrama while" style="max-width:430px;width:100%">
+      <polygon points="210,15 320,62 210,109 100,62" fill="none" stroke="#fb923c" stroke-width="2"/>
+      <text x="210" y="66" text-anchor="middle" fill="#e2e8f0" font-size="12">condicion?</text>
+      <text x="330" y="52" text-anchor="middle" fill="#34d399" font-size="11">True</text>
+      <line x1="320" y1="62" x2="380" y2="62" stroke="#34d399" stroke-width="2"/>
+      <line x1="380" y1="62" x2="380" y2="140" stroke="#34d399" stroke-width="2"/>
+      <rect x="320" y="140" width="120" height="40" rx="8" fill="none" stroke="#34d399" stroke-width="2"/>
+      <text x="380" y="164" text-anchor="middle" fill="#e2e8f0" font-size="11">instrucciones</text>
+      <path d="M 380 180 L 380 210 L 210 210 L 210 109" fill="none" stroke="#34d399" stroke-width="2"/>
+      <text x="295" y="204" text-anchor="middle" fill="#93a4bd" font-size="11">vuelve a preguntar</text>
+      <line x1="100" y1="62" x2="30" y2="62" stroke="#f87171" stroke-width="2"/>
+      <text x="65" y="54" text-anchor="middle" fill="#f87171" font-size="11">False</text>
+      <line x1="30" y1="62" x2="30" y2="160" stroke="#f87171" stroke-width="2"/>
+      <line x1="30" y1="160" x2="105" y2="160" stroke="#f87171" stroke-width="2"/>
+      <text x="68" y="178" text-anchor="middle" fill="#e2e8f0" font-size="11">sale del ciclo</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ==================================================== -->
+<section id="datos">
+  <h2><span class="num">4.</span> Ingreso y salida de datos</h2>
+  <p class="intro">Todo programa interactivo hace lo mismo: <strong>ingresa</strong>
+  un dato (<code>input()</code>), <strong>procesa</strong>, y
+  <strong>muestra</strong> el resultado (<code>print()</code>). Ojo:
+  <code>input()</code> siempre devuelve texto (str), aunque escriban numeros.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Ingreso: input() y conversiones</h3>
+      <table class="datos">
+        <tr><th>Funcion</th><th>Convierte a</th><th>Ejemplo</th></tr>
+        <tr><td><code>int()</code></td><td>entero</td><td><code>int("15") -&gt; 15</code></td></tr>
+        <tr><td><code>float()</code></td><td>decimal</td><td><code>float("1.75") -&gt; 1.75</code></td></tr>
+        <tr><td><code>str()</code></td><td>texto</td><td><code>str(21) -&gt; "21"</code></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Salida: print() y f-strings</h3>
+<pre class="codigo"><span class="fn">print</span>(<span class="st">"Hola"</span>, nombre)          <span class="cm"># separa con espacio</span>
+<span class="fn">print</span>(<span class="fn">f"El doble es {doble}"</span>)  <span class="cm"># f-string: mete variables adentro</span>
+<span class="fn">print</span>(<span class="fn">f"{n}x{i}={n*i}"</span>)         <span class="cm"># asi arma las tablas de LasTablas.py</span></pre>
+      <p class="intro">La <code>f</code> antes de las comillas permite poner
+      variables entre llaves sin cortar el texto.</p>
+    </div>
+    <div class="card">
+      <h3>Patron completo</h3>
+<pre class="codigo"><span class="cm"># leer - convertir - calcular - mostrar</span>
+numero = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st">"Ingrese un numero: "</span>))
+doble = numero * <span class="nu">2</span>
+<span class="fn">print</span>(<span class="st">f"El doble es {doble}"</span>)</pre>
+      <p class="intro">Este es exactamente el esquema del ejercicio
+      <em>doble.py</em> visto en clase.</p>
+    </div>
+  </div>
+  <div class="alerta"><strong>Error clasico:</strong>
+  <code>"2" + "3"</code> da <code>"23"</code> (concatena texto) porque input trajo
+  str. Sin <code>int()</code>, el programa corre pero calcula mal.</div>
+  <div class="buenas"><strong>Buenas practicas con input:</strong>
+  <ol style="margin:.4rem 0 0; padding-left:1.2rem">
+    <li>Mensaje claro que diga que dato se espera.</li>
+    <li>Converti apenas lees: <code>int(input(...))</code>.</li>
+    <li>Si puede fallar la conversion, protege con <code>try / except</code>
+    (lo usamos en <em>Adivina el numero</em>).</li>
+  </ol></div>
+</section>
+
+<!-- ==================================================== -->
+<section id="funciones">
+  <h2><span class="num">5.</span> Modularizacion: funciones con def</h2>
+  <p class="intro">Una funcion es una caja con nombre que guarda instrucciones
+  para <strong>reutilizarlas</strong>. Analogia: la receta de unas tortas fritas
+  se escribe una vez y se usa cada vez que haga falta.</p>
+
+  <div class="tabs" data-tabs="t-func">
+    <button class="on" data-p="pn-anatomia">Anatomia</button>
+    <button data-p="pn-parametros">Parametros vs argumentos</button>
+    <button data-p="pn-default">Valores por defecto</button>
+    <button data-p="pn-return">return y None</button>
+    <button data-p="pn-global">Variables locales y globales</button>
+  </div>
+
+  <div class="card panel on" id="pn-anatomia">
+<h3>Partes de una funcion</h3>
+<pre class="codigo"><span class="kw">def</span> <span class="fn">es_par</span>(n):                <span class="cm"># def + nombre + (parametros):</span>
+    <span class="kw">if</span> n % <span class="nu">2</span> == <span class="nu">0</span>:        <span class="cm"># cuerpo (con sangria)</span>
+        <span class="kw">return</span> <span class="kw">True</span>       <span class="cm"># devuelve un valor a quien llamo</span>
+    <span class="kw">else</span>:
+        <span class="kw">return</span> <span class="kw">False</span>
+
+resultado = <span class="fn">es_par</span>(<span class="nu">8</span>)         <span class="cm"># llamada: el valor queda en resultado</span>
+<span class="fn">print</span>(resultado)               <span class="cm"># True</span></pre>
+    <div class="okbox"><strong>Definir no es ejecutar:</strong> el cuerpo corre
+    recien cuando alguien llama a la funcion por su nombre.</div>
+  </div>
+
+  <div class="card panel" id="pn-parametros">
+    <table class="datos">
+      <tr><th>Concepto</th><th>Que es</th><th>Donde vive</th><th>Ejemplo</th></tr>
+      <tr><td>Parametro</td><td>la variable que la funcion recibe</td><td>en la definicion</td><td><code>def tabla(n):</code></td></tr>
+      <tr><td>Argumento</td><td>el valor concreto enviado</td><td>en la llamada</td><td><code>tabla(7)</code></td></tr>
+    </table>
+<pre class="codigo"><span class="kw">def</span> <span class="fn">tabla</span>(n):                  <span class="cm"># n es el parametro</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nu">1</span>, <span class="nu">11</span>):
+        <span class="fn">print</span>(<span class="fn">f"{n}*{i}={n*i}"</span>)
+
+<span class="fn">tabla</span>(<span class="nu">7</span>)                       <span class="cm"># 7 es el argumento</span></pre>
+    <p class="intro">Es la misma funcion <code>mostrar_tabla(n)</code> del
+    proyecto <em>LasTablas.py</em>, vista en version consola.</p>
+  </div>
+
+  <div class="card panel" id="pn-default">
+    <h3>Valor por defecto (default)</h3>
+    <p>Un parametro puede traer un valor precargado: si la llamada no lo envia,
+    se usa ese.</p>
+<pre class="codigo"><span class="kw">def</span> <span class="fn">saludo</span>(nombre=<span class="st">"mundo"</span>):
+    <span class="fn">print</span>(<span class="st">"Hola"</span>, nombre)
+
+<span class="fn">saludo</span>(<span class="st">"Ana"</span>)     <span class="cm"># Hola Ana</span>
+<span class="fn">saludo</span>()           <span class="cm"># Hola mundo   (usa el default)</span></pre>
+    <table class="datos">
+      <tr><th>Llamada</th><th>nombre vale</th></tr>
+      <tr><td><code>saludo("Ana")</code></td><td>"Ana" (argumento pisa al default)</td></tr>
+      <tr><td><code>saludo()</code></td><td>"mundo" (default)</td></tr>
+    </table>
+  </div>
+
+  <div class="card panel" id="pn-return">
+    <h3>return: devolver un resultado</h3>
+<pre class="codigo"><span class="kw">def</span> <span class="fn">area_rectangulo</span>(base, altura):
+    <span class="kw">return</span> base * altura
+
+a = <span class="fn">area_rectangulo</span>(<span class="nu">5</span>, <span class="nu">3</span>)   <span class="cm"># a vale 15</span></pre>
+    <table class="datos">
+      <tr><th></th><th>print</th><th>return</th></tr>
+      <tr><td>Que hace</td><td>muestra en pantalla</td><td>entrega el valor al programa</td></tr>
+      <tr><td>Se puede guardar</td><td>no</td><td>si: <code>x = funcion()</code></td></tr>
+      <tr><td>Sirve para seguir calculando</td><td>no</td><td>si</td></tr>
+    </table>
+    <div class="alerta"><strong>Sin return:</strong> toda funcion devuelve
+    <code>None</code> aunque tenga print. Print muestra; return entrega.</div>
+  </div>
+
+  <div class="card panel" id="pn-global">
+    <h3>Locales y globales</h3>
+    <ul style="margin:.3rem 0 .6rem; padding-left:1.2rem">
+      <li><strong>Local:</strong> nace dentro de la funcion, muere al terminar.</li>
+      <li><strong>Global:</strong> nace fuera; todas las funciones pueden leerla.</li>
+      <li><strong>Para modificarla</strong> dentro de una funcion hay que declarar
+      <code>global</code>.</li>
+    </ul>
+<pre class="codigo">intentos = <span class="nu">0</span>                 <span class="cm"># global</span>
+
+<span class="kw">def</span> <span class="fn">sumar_intento</span>():
+    <span class="kw">global</span> intentos
+    intentos = intentos + <span class="nu">1</span></pre>
+    <p class="intro">En <em>Adivina el numero</em> hicimos esto mismo:
+    <code>global numero_secreto</code> dentro de <code>reiniciar()</code>.</p>
+    <div class="buenas"><strong>Buena practica:</strong> usá <code>global</code>
+    solo cuando sea necesario; lo ideal es pasar datos por parametros y
+    recibir resultados con <code>return</code>.</div>
+  </div>
+</section>
+
+<!-- ==================================================== -->
+<section id="tkinter">
+  <h2><span class="num">6.</span> Integracion: interfaz con Tkinter</h2>
+  <p class="intro">Hasta aca el programa conversaba por consola. Con
+  <strong>Tkinter</strong> (viene incluido en Python) armamos ventanas con
+  etiquetas, campos y botones: el usuario interactua y el programa
+  <strong>reacciona a eventos</strong>.</p>
+
+  <div class="tabs" data-tabs="t-tk">
+    <button class="on" data-p="pt-base">Ventana base</button>
+    <button data-p="pt-widgets">Widgets y eventos</button>
+    <button data-p="pt-after">Temporizador after()</button>
+    <button data-p="pt-herram">random, try y delete</button>
+    <button data-p="pt-reglas">Reglas de oro</button>
+  </div>
+
+  <div class="card panel on" id="pt-base">
+<pre class="codigo"><span class="kw">from</span> tkinter <span class="kw">import</span> *
+
+ventana = <span class="fn">Tk</span>()
+ventana.title(<span class="st">"Mi app"</span>)
+ventana.geometry(<span class="st">"400x300"</span>)
+
+ventana.mainloop()      <span class="cm"># deja la ventana viva, escuchando eventos</span></pre>
+    <p class="intro"><code>mainloop()</code> es el motor: un ciclo oculto que
+    espera clicks y teclas para disparar las funciones que indicaste.</p>
+  </div>
+
+  <div class="card panel" id="pt-widgets">
+    <table class="datos">
+      <tr><th>Widget</th><th>Para que</th><th>Tipico</th></tr>
+      <tr><td><code>Label</code></td><td>mostrar texto</td><td><code>Label(ventana, text="Hola")</code></td></tr>
+      <tr><td><code>Entry</code></td><td>campo de escritura</td><td><code>entrada.get()</code> lee su contenido</td></tr>
+      <tr><td><code>Button</code></td><td>disparar accion</td><td><code>command=verificar</code></td></tr>
+      <tr><td><code>Frame</code></td><td>agrupar / ordenar</td><td><code>frame1.pack(fill="both")</code></td></tr>
+    </table>
+<h3>Patron completo (version Adivina el numero)</h3>
+<pre class="codigo"><span class="kw">def</span> <span class="fn">verificar</span>():
+    <span class="kw">try</span>:
+        intento = <span class="fn">int</span>(entrada.get())          <span class="cm"># lee el Entry</span>
+        <span class="kw">if</span> intento == numero_secreto:
+            resultado.config(text=<span class="st">"Correcto!"</span>, bg=<span class="st">"green"</span>, fg=<span class="st">"white"</span>)
+        <span class="kw">else</span>:
+            resultado.config(text=<span class="st">"No es ese..."</span>, bg=<span class="st">"orange"</span>)
+    <span class="kw">except</span>:
+        resultado.config(text=<span class="st">"Escribi un numero valido"</span>, bg=<span class="st">"red"</span>, fg=<span class="st">"white"</span>)
+
+boton = <span class="fn">Button</span>(ventana, text=<span class="st">"Verificar"</span>, command=verificar)</pre>
+    <div class="alerta"><strong>Error clasico Nº1:</strong>
+    <code>command=verificar()</code> con parentesis ejecuta la funcion UNA vez al
+    crear el boton y luego no hace nada. Sin parentesis
+    (<code>command=verificar</code>) entregas la funcion para que el click la
+    llame. Si necesitas enviarle datos: <code>command=lambda: tabla(7)</code>.</div>
+  </div>
+
+  <div class="card panel" id="pt-after">
+    <h3>Despues de un rato: after(milisegundos, funcion)</h3>
+<pre class="codigo"><span class="kw">def</span> <span class="fn">subir</span>():
+    <span class="kw">global</span> segundos
+    segundos = segundos + <span class="nu">1</span>
+    reloj.config(text=str(segundos))
+    ventana.after(<span class="nu">1000</span>, subir)   <span class="cm"># se re-agenda a si misma: repite cada 1 s</span>
+
+segundos = <span class="nu">0</span>
+ventana.after(<span class="nu">1000</span>, subir)       <span class="cm"># primera llamada: arranca el ciclo</span></pre>
+    <table class="datos">
+      <tr><th></th><th>while + time.sleep</th><th>after()</th></tr>
+      <tr><td>Consola</td><td>si</td><td>-</td></tr>
+      <tr><td>Ventana Tkinter</td><td><strong>NO: congela todo</strong></td><td>si, sin congelar</td></tr>
+    </table>
+    <div class="okbox"><strong>Truco pro:</strong> <code>after</code> agenda UNA
+    sola ejecucion. Para repetir, la funcion se llama de nuevo al final
+    (se re-agenda). Es como tirar la pelota contra la pared: cada rebote
+    vuelve a programar el proximo.</div>
+  </div>
+
+  <div class="card panel" id="pt-herram">
+    <h3>Herramienta 1: numeros al azar con random</h3>
+<pre class="codigo"><span class="kw">import</span> random
+
+numero_secreto = random.<span class="fn">randint</span>(<span class="nu">1</span>, <span class="nu">10</span>)   <span class="cm"># incluye AMBOS extremos: 1 a 10</span></pre>
+    <p class="intro"><code>randint(a, b)</code> tira un entero entre a y b,
+    extremos incluidos. Es lo que usa <em>Adivina el numero</em> para elegir el
+    secreto, y tambien <code>reiniciar()</code> para cambiarlo en cada partida.</p>
+
+    <h3>Herramienta 2: try / except (proteger la conversion)</h3>
+    <table class="datos">
+      <tr><th>Error</th><th>Cuando pasa</th><th>Ejemplo</th></tr>
+      <tr><td><code>ValueError</code></td><td>conversion imposible</td><td><code>int("hola")</code></td></tr>
+      <tr><td><code>ZeroDivisionError</code></td><td>division por cero</td><td><code>total / 0</code></td></tr>
+      <tr><td><code>NameError</code></td><td>variable sin definir</td><td>usar <code>tota1</code> en vez de <code>total</code></td></tr>
+    </table>
+<pre class="codigo"><span class="kw">try</span>:
+    intento = <span class="fn">int</span>(entrada.get())   <span class="cm"># zona protegida: puede fallar</span>
+    ...
+<span class="kw">except</span>:
+    resultado.config(text=<span class="st">"Escribi un numero valido"</span>)  <span class="cm"># plan B sin crash</span></pre>
+    <div class="okbox"><strong>Idea clave:</strong> si algo dentro del try falla,
+    el programa NO se cierra: salta directo al except.</div>
+
+    <h3>Herramienta 3: vaciar y actualizar widgets</h3>
+    <table class="datos">
+      <tr><th>Accion</th><th>Linea</th><th>Widget</th></tr>
+      <tr><td>leer lo escrito</td><td><code>entrada.get()</code></td><td>Entry</td></tr>
+      <tr><td>vaciar el campo</td><td><code>entrada.delete(0, END)</code></td><td>Entry</td></tr>
+      <tr><td>cambiar texto/color</td><td><code>resultado.config(text=..., bg=...)</code></td><td>Label</td></tr>
+    </table>
+<pre class="codigo"><span class="kw">def</span> <span class="fn">reiniciar</span>():
+    <span class="kw">global</span> numero_secreto
+    numero_secreto = random.randint(<span class="nu">1</span>, <span class="nu">10</span>)
+    entrada.delete(<span class="nu">0</span>, END)          <span class="cm"># borra desde el caracter 0 hasta el final</span>
+    resultado.config(text=<span class="st">""</span>, bg=ventana.cget(<span class="st">"bg"</span>))</pre>
+  </div>
+
+  <div class="card panel" id="pt-reglas">
+    <div class="buenas"><strong>Reglas de oro de Tkinter</strong>
+    <ol style="margin:.4rem 0 0; padding-left:1.2rem">
+      <li>Nada de <code>while</code> ni <code>input()</code> dentro de una app de
+      ventanas: bloquean el mainloop. El reemplazo del while es
+      <code>after()</code>; el del input es el <code>Entry</code>.</li>
+      <li>Los datos vivian en widgets: <code>.get()</code> para leer,
+      <code>.config()</code> para cambiar, <code>.delete(0, END)</code> para vaciar.</li>
+      <li>Boton lleva la funcion SIN parentesis; con datos, usa
+      <code>lambda</code>.</li>
+      <li>Si una funcion cambia una variable global, declara
+      <code>global</code>.</li>
+      <li><code>mainloop()</code> siempre al final del archivo.</li>
+    </ol></div>
+  </div>
+</section>
+
+<!-- ==================================================== -->
+<section id="practica">
+  <h2><span class="num">6.</span> Practica interactiva con correccion automatica</h2>
+  <p class="intro">Resolve en orden: cada ejercicio valida tu respuesta en el
+  momento (verde = bien, rojo = revisa). Despues podes abrir la resolucion paso
+  a paso.</p>
+
+  <p class="intro">Son <strong>15 ejercicios progresivos</strong> que cubren
+  todos los temas de la guia: variables, decisiones, ciclos, acumuladores,
+  funciones y Tkinter. Cada uno valida tu respuesta en el momento (verde = bien,
+  rojo = revisa). Despues podes abrir la resolucion paso a paso.</p>
+
+  <!-- E1 -->
+  <div class="card ejercicio" data-ej="1">
+    <h3>Ejercicio 1 · Variables: que guarda cada caja</h3>
+    <p class="enun">Dado este codigo:</p>
+<pre class="codigo">a = <span class="nu">5</span>
+b = a + <span class="nu">2</span>
+a = <span class="nu">10</span>
+<span class="fn">print</span>(b)</pre>
+    <p class="enun">Que numero muestra?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">12</button>
+      <button class="opcion" data-correct="1">7</button>
+      <button class="opcion" data-correct="0">10</button>
+      <button class="opcion" data-correct="0">Da error</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion paso a paso</summary>
+      Cuando se ejecuta <code>b = a + 2</code>, a vale 5, entonces b guarda 7.
+      Cambiar a DESPUES no modifica b: cada caja guardo el valor de ese momento.
+    </details>
+  </div>
+
+  <!-- E2 -->
+  <div class="card ejercicio" data-ej="2">
+    <h3>Ejercicio 2 · Que imprime? (if / elif)</h3>
+    <p class="enun">Dado este codigo:</p>
+<pre class="codigo">edad = <span class="nu">15</span>
+<span class="kw">if</span> edad &gt;= <span class="nu">18</span>:
+    <span class="fn">print</span>(<span class="st">"Mayor"</span>)
+<span class="kw">elif</span> edad &gt;= <span class="nu">13</span>:
+    <span class="fn">print</span>(<span class="st">"Adolescente"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="st">"Ninio"</span>)</pre>
+    <p class="enun">Que texto aparece en pantalla?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">Mayor</button>
+      <button class="opcion" data-correct="1">Adolescente</button>
+      <button class="opcion" data-correct="0">Ninio</button>
+      <button class="opcion" data-correct="0">Nada, da error</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion paso a paso</summary>
+      edad 15 no cumple <code>&gt;= 18</code>, pero si cumple
+      <code>&gt;= 13</code>: entra al primer elif que sea verdadero y salta el resto.
+    </details>
+  </div>
+
+  <!-- E3 -->
+  <div class="card ejercicio" data-ej="3">
+    <h3>Ejercicio 3 · Completa el menu (while + break)</h3>
+    <p class="enun">Completa las dos partes que faltan para que el menu se repita
+    hasta que escriban S:</p>
+<pre class="codigo"><span class="kw">while</span> <input class="resp" data-ok="true" size="6" maxlength="8"> :
+    opcion = input("Opcion (S sale): ")
+    if opcion == "S":
+        <input class="resp" data-ok="break" size="8" maxlength="10"></pre>
+    <div class="zona-resp">
+      <button class="btn" data-corregir="3">Corregir</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion paso a paso</summary>
+      <code>while True</code> repite para siempre; el <code>break</code> es la
+      valvula de escape cuando la opcion es S.
+    </details>
+  </div>
+
+  <!-- E4 -->
+  <div class="card ejercicio" data-ej="4">
+    <h3>Ejercicio 4 · El tipo traicionero (input)</h3>
+    <p class="enun">El usuario escribe <code>7</code> en
+    <code>n = input("Numero: ")</code>. Que guarda n y que produce
+    <code>n * 2</code>?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">Guarda 7 (int) y produce 14</button>
+      <button class="opcion" data-correct="1">Guarda "7" (str) y produce "77"</button>
+      <button class="opcion" data-correct="0">Da error de sintaxis</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion paso a paso</summary>
+      input devuelve str. Multiplicar str por 2 repite el texto. Solucion:
+      <code>n = int(input(...))</code>.
+    </details>
+  </div>
+
+  <!-- E5 -->
+  <div class="card ejercicio" data-ej="5">
+    <h3>Ejercicio 5 · for y range</h3>
+    <p class="enun">Cuantas vueltas da y que valores toma i en
+    <code>for i in range(1, 6):</code>?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">6 vueltas: i = 1, 2, 3, 4, 5, 6</button>
+      <button class="opcion" data-correct="1">5 vueltas: i = 1, 2, 3, 4, 5</button>
+      <button class="opcion" data-correct="0">6 vueltas: i = 0, 1, 2, 3, 4, 5</button>
+      <button class="opcion" data-correct="0">4 vueltas: i = 0, 1, 2, 3</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion paso a paso</summary>
+      range(1, 6) arranca en 1 y llega HASTA 6 sin incluirlo: son 5 valores.
+      Regla: el segundo numero nunca entra.
+    </details>
+  </div>
+
+  <!-- E6 -->
+  <div class="card ejercicio" data-ej="6">
+    <h3>Ejercicio 6 · Acumulador paso a paso</h3>
+    <p class="enun">Dado este codigo:</p>
+<pre class="codigo">total = <span class="nu">0</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nu">3</span>):
+    total = total + i
+<span class="fn">print</span>(total)</pre>
+    <p class="enun">Que numero imprime?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">6</button>
+      <button class="opcion" data-correct="1">3</button>
+      <button class="opcion" data-correct="0">0</button>
+      <button class="opcion" data-correct="0">Error: range necesita dos datos</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion paso a paso (sigue la traza)</summary>
+      range(3) genera i = 0, 1, 2.<br>
+      Vuelta 1: total = 0 + 0 = 0<br>
+      Vuelta 2: total = 0 + 1 = 1<br>
+      Vuelta 3: total = 1 + 2 = 3 &nbsp;(imprime 3)
+    </details>
+  </div>
+
+  <!-- E7 -->
+  <div class="card ejercicio" data-ej="7">
+    <h3>Ejercicio 7 · Contador en accion</h3>
+    <p class="enun">Las notas ingresadas son 4, 8 y 9. Que vale
+    <code>aprobados</code> al final?</p>
+<pre class="codigo">aprobados = <span class="nu">0</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nu">3</span>):
+    nota = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st">"Nota: "</span>))
+    <span class="kw">if</span> nota &gt;= <span class="nu">6</span>:
+        aprobados = aprobados + <span class="nu">1</span></pre>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">0</button>
+      <button class="opcion" data-correct="1">2</button>
+      <button class="opcion" data-correct="0">3</button>
+      <button class="opcion" data-correct="0">9</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion paso a paso</summary>
+      El 4 no suma. El 8 suma 1, el 9 suma otro 1. El contador arranca en 0 y
+      crece de a UNO solo cuando la condicion del if es verdadera: queda en 2.
+    </details>
+  </div>
+
+  <!-- E8 -->
+  <div class="card ejercicio" data-ej="8">
+    <h3>Ejercicio 8 · Completa el acumulador</h3>
+    <p class="enun">El programa suma 4 precios cargados por teclado. Escribi que
+    variable va en el hueco para ACUMULAR:</p>
+<pre class="codigo">total = 0
+for i in range(4):
+    precio = int(input("Precio: "))
+    <input class="resp" data-ok="total" size="8" maxlength="10"> = <input class="resp" data-ok="total" size="8" maxlength="10"> + precio
+print("Total:", total)</pre>
+    <div class="zona-resp">
+      <button class="btn" data-corregir="8">Corregir</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion paso a paso</summary>
+      El patron del acumulador es <code>total = total + precio</code>: toma lo
+      que ya habia, le suma lo nuevo y vuelve a guardar en la misma caja.
+    </details>
+  </div>
+
+  <!-- E9 -->
+  <div class="card ejercicio" data-ej="9">
+    <h3>Ejercicio 9 · Arma la funcion (def + return)</h3>
+    <p class="enun">Completa una funcion que reciba una nota y devuelva
+    "Aprobado" si es mayor o igual a 6:</p>
+<pre class="codigo"><input class="resp" data-ok="def" size="6" maxlength="6"> estado(nota):
+    if nota >= 6:
+        <input class="resp" data-ok="return" size="9" maxlength="10"> "Aprobado"
+    else:
+        return "Reprobado"</pre>
+    <div class="zona-resp">
+      <button class="btn" data-corregir="9">Corregir</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion paso a paso</summary>
+      <code>def</code> crea la funcion; <code>return</code> entrega el texto a
+      quien la llamo (por ejemplo <code>r = estado(8)</code>).
+    </details>
+  </div>
+
+  <!-- E10 -->
+  <div class="card ejercicio" data-ej="10">
+    <h3>Ejercicio 10 · Salida con f-string</h3>
+    <p class="enun">Con <code>promedio = 7.5</code>, cual linea imprime
+    exactamente <code>Promedio: 7.5</code>?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="1">print(f"Promedio: {promedio}")</button>
+      <button class="opcion" data-correct="0">print("Promedio: {promedio}")</button>
+      <button class="opcion" data-correct="0">print("Promedio: " + promedio)</button>
+      <button class="opcion" data-correct="0">print(Promedio: promedio)</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion paso a paso</summary>
+      Sin la <code>f</code>, las llaves son texto comun. Y sumar texto con
+      numero (<code>"..." + promedio</code>) da TypeError: habria que convertir
+      con str(). La f-string resuelve todo limpio.
+    </details>
+  </div>
+
+  <!-- E11 -->
+  <div class="card ejercicio" data-ej="11">
+    <h3>Ejercicio 11 · Azar controlado (random)</h3>
+    <p class="enun">Para Adivina el numero necesitas un entero entre 1 y 10,
+    incluidos los dos. Cual linea lo logra?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="1">numero_secreto = random.randint(1, 10)</button>
+      <button class="opcion" data-correct="0">numero_secreto = random.randint(1, 9)</button>
+      <button class="opcion" data-correct="0">numero_secreto = random.range(10)</button>
+      <button class="opcion" data-correct="0">numero_secreto = random(1, 10)</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion paso a paso</summary>
+      randint(a, b) incluye ambos extremos. Falta ademas el
+      <code>import random</code> al inicio del archivo: sin import, NameError.
+    </details>
+  </div>
+
+  <!-- E12 -->
+  <div class="card ejercicio" data-ej="12">
+    <h3>Ejercicio 12 · Vaciar el Entry (.delete)</h3>
+    <p class="enun">En "Jugar otra vez" hay que borrar lo que escribio el jugador.
+    Cual linea vacia el campo <code>entrada</code>?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="1">entrada.delete(0, END)</button>
+      <button class="opcion" data-correct="0">entrada.clear()</button>
+      <button class="opcion" data-correct="0">entrada.config(text="")</button>
+      <button class="opcion" data-correct="0">entrada.delete(END)</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion paso a paso</summary>
+      Un Entry se borra indicando desde-hasta: <code>delete(0, END)</code>.
+      clear() no existe en Tkinter y config(text=...) sirve para Labels, no para
+      campos de escritura.
+    </details>
+  </div>
+
+  <!-- E13 -->
+  <div class="card ejercicio" data-ej="13">
+    <h3>Ejercicio 13 · Para que sirve el try</h3>
+    <p class="enun">En verificar() del Adivina envolvemos
+    <code>int(entrada.get())</code> en un try/except. Por que?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="1">Porque si escriben letras, int() corta el programa (ValueError); el except muestra el aviso sin crash</button>
+      <button class="opcion" data-correct="0">Porque hace que el boton responda mas rapido</button>
+      <button class="opcion" data-correct="0">Porque command exige una funcion protegida</button>
+      <button class="opcion" data-correct="0">Porque el Entry devuelve siempre texto vacio</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion paso a paso</summary>
+      Si algo falla dentro del try (como int("abc")), Python salta al except en
+      vez de cerrarse: la ventana sigue viva y el Label avisa el error.
+    </details>
+  </div>
+
+  <!-- E14 -->
+  <div class="card ejercicio" data-ej="14">
+    <h3>Ejercicio 14 · Botones que obedecen (command)</h3>
+    <p class="enun">Cual linea conecta BIEN el boton con la funcion verificar?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">boton = Button(ventana, text="OK", command=verificar)</button>
+      <button class="opcion" data-correct="1">boton = Button(ventana, text="OK", command=verificar())</button>
+      <button class="opcion" data-correct="0">boton = Button(ventana, text="OK", command="verificar")</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion paso a paso</summary>
+      Con parentesis la funcion corre una sola vez al crearse el boton (y suele
+      dar error si lee un Entry vacio). Sin parentesis se pasa "la direccion" de
+      la funcion y el click la llama.
+    </details>
+  </div>
+
+  <!-- E15 -->
+  <div class="card ejercicio" data-ej="15">
+    <h3>Ejercicio 15 · El temporizador (after)</h3>
+    <p class="enun">Queres que un contador suba uno por segundo en la ventana.
+    Como se logra repetir la ejecucion con <code>after</code>?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">Llamando after(1000, subir) una unica vez; eso ya repite solo</button>
+      <button class="opcion" data-correct="1">Agendandolo otra vez DENTRO de la funcion: al final de subir() va ventana.after(1000, subir)</button>
+      <button class="opcion" data-correct="0">Con while True: pass antes de mainloop()</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion paso a paso</summary>
+      after agenda una sola ejecucion. El patron es re-agendar desde dentro
+      (asi funciona la animacion del sapo en LasTablas.py). Un while bloquearia
+      la ventana.
+    </details>
+  </div>
+
+  <!-- SIMULADORES -->
+  <div class="grid">
+    <div class="card" id="sim-adivina">
+      <h3>Simulador · Adivina el numero</h3>
+      <p class="intro">La misma logica de <em>adivina.py</em>: pensa un numero
+      del 1 al 10 y proba como reacciona el if / elif / else.</p>
+      <div class="zona-resp" style="display:flex; gap:.5rem; flex-wrap:wrap; align-items:center">
+        <input class="resp" id="adiv-input" size="6" placeholder="1-10">
+        <button class="btn" id="adiv-btn">Verificar</button>
+        <button class="btn sec" id="adiv-reset">Jugar otra vez</button>
+      </div>
+      <div class="feedback" id="adiv-out"></div>
+      <details class="solu"><summary>Como funciona por dentro</summary>
+        Se genera <code>random.randint(1,10)</code>. Tu numero se compara con
+        if / elif / else y el Label cambia de color con
+        <code>.config(bg=...)</code>. El try/except atrapa textos no numericos.
+      </details>
+    </div>
+
+    <div class="card" id="sim-reloj">
+      <h3>Simulador · Temporizador tipo after()</h3>
+      <p class="intro">Igual que el cronometro con
+      <code>ventana.after(1000, subir)</code>: un evento se re-agenda solo.</p>
+      <p style="font-size:2rem; margin:.2rem 0" id="reloj-num">0</p>
+      <div class="zona-resp" style="display:flex; gap:.5rem; flex-wrap:wrap">
+        <button class="btn" id="reloj-ini">Iniciar</button>
+        <button class="btn sec" id="reloj-deta">Detener</button>
+        <button class="btn sec" id="reloj-cero">Reiniciar</button>
+      </div>
+      <div class="feedback" id="reloj-estado"></div>
+      <details class="solu"><summary>Como funciona por dentro</summary>
+        En Python: <code>subir()</code> suma 1, actualiza el Label y termina con
+        <code>ventana.after(1000, subir)</code>. Aqui el navegador hace lo mismo
+        con un temporizador interno: mientras corre, la pagina NO se congela,
+        igual que en Tkinter.
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer style="text-align:center; color:var(--mut); font-size:.85rem; margin-top:2.5rem">
+  Guia interactiva · Programacion Estructurada en Python · 5to Ano Tecnico
+</footer>
+
+</main>
+
+<div class="marcador">
+  <div class="inner">
+    <strong style="font-size:.9rem">Progreso</strong>
+    <div style="flex:1; height:10px; background:#18233c; border-radius:999px; overflow:hidden">
+      <div id="barra-prog" style="height:100%; width:0%; background:var(--verde); transition:width .3s"></div>
+    </div>
+    <span id="marcador-txt" style="font-size:.9rem; color:var(--mut)">0 / 15</span>
+  </div>
+</div>
+
+<script>
+/* ---------------- Pestañas ---------------- */
+document.querySelectorAll(".tabs").forEach(function(grupo){
+  grupo.addEventListener("click", function(e){
+    if(e.target.tagName !== "BUTTON") return;
+    var botones = grupo.querySelectorAll("button");
+    botones.forEach(function(b){ b.classList.remove("on"); });
+    e.target.classList.add("on");
+    /* apaga todos los paneles hermanos de este grupo */
+    var paneles = [];
+    var hermano = grupo.nextElementSibling;
+    while(hermano && hermano.classList.contains("panel")){
+      paneles.push(hermano);
+      hermano = hermano.nextElementSibling;
+    }
+    paneles.forEach(function(p){ p.classList.remove("on"); });
+    document.getElementById(e.target.dataset.p).classList.add("on");
+  });
+});
+
+/* ---------------- Marcador ---------------- */
+const TOTAL = 15;
+const resueltos = new Set();
+function marcarResuelto(n){
+  resueltos.add(String(n));
+  const cant = resueltos.size;
+  document.getElementById("barra-prog").style.width = (cant / TOTAL * 100) + "%";
+  document.getElementById("marcador-txt").textContent = cant + " / " + TOTAL;
+}
+
+function normalizar(t){
+  return t.trim().toLowerCase().replace(/["']/g, "");
+}
+
+/* ---------------- Opciones multiple choice ---------------- */
+document.querySelectorAll(".ejercicio").forEach(function(card){
+  const num = card.dataset.ej;
+  const fb = card.querySelector(".feedback");
+
+  card.querySelectorAll(".opcion").forEach(function(op){
+    op.addEventListener("click", function(){
+      if(resueltos.has(num)) return;
+      if(op.dataset.correct === "1"){
+        op.classList.add("okk");
+        fb.textContent = "Correcto!";
+        fb.className = "feedback ok";
+        marcarResuelto(num);
+      } else {
+        op.classList.add("mall");
+        fb.textContent = "No es esa. Probá de nuevo.";
+        fb.className = "feedback mal";
+        setTimeout(function(){ op.classList.remove("mall"); }, 900);
+      }
+    });
+  });
+
+  /* ---------------- Completar huecos ---------------- */
+  const btnCorregir = card.querySelector("[data-corregir]");
+  if(btnCorregir){
+    btnCorregir.addEventListener("click", function(){
+      if(resueltos.has(num)) return;
+      let todosBien = true;
+      card.querySelectorAll("input.resp").forEach(function(inp){
+        if(normalizar(inp.value) === normalizar(inp.dataset.ok)){
+          inp.classList.add("okk"); inp.classList.remove("mall");
+        } else {
+          inp.classList.add("mall"); inp.classList.remove("okk");
+          todosBien = false;
+        }
+      });
+      if(todosBien){
+        fb.textContent = "Correcto! Codigo completo.";
+        fb.className = "feedback ok";
+        marcarResuelto(num);
+      } else {
+        fb.textContent = "Hay casillas en rojo. Revisa e intenta de nuevo.";
+        fb.className = "feedback mal";
+      }
+    });
+  }
+});
+
+/* ---------------- Simulador Adivina ---------------- */
+(function(){
+  let secreto = Math.floor(Math.random() * 10) + 1;
+  const inp = document.getElementById("adiv-input");
+  const out = document.getElementById("adiv-out");
+  function verificar(){
+    const txt = inp.value.trim();
+    out.classList.remove("ok","mal");
+    if(txt === "" || isNaN(Number(txt))){
+      out.textContent = "Escribí un número válido";
+      out.classList.add("mal");
+      return;
+    }
+    const n = Number(txt);
+    if(n === secreto){
+      out.textContent = "¡Correcto! Era " + secreto + ".";
+      out.classList.add("ok");
+    } else if(n < secreto){
+      out.textContent = "El número es mayor";
+      out.classList.add("mal");
+    } else {
+      out.textContent = "El número es menor";
+      out.classList.add("mal");
+    }
+  }
+  document.getElementById("adiv-btn").addEventListener("click", verificar);
+  inp.addEventListener("keydown", function(e){ if(e.key === "Enter") verificar(); });
+  document.getElementById("adiv-reset").addEventListener("click", function(){
+    secreto = Math.floor(Math.random() * 10) + 1;
+    inp.value = "";
+    out.textContent = "";
+  });
+})();
+
+/* ---------------- Simulador Reloj (after) ---------------- */
+(function(){
+  let seg = 0, id = null;
+  const num = document.getElementById("reloj-num");
+  const estado = document.getElementById("reloj-estado");
+  document.getElementById("reloj-ini").addEventListener("click", function(){
+    if(id !== null){
+      estado.textContent = "Ya está corriendo";
+      return;
+    }
+    estado.textContent = "Corriendo... (evento re-agendado cada 1 s)";
+    function tick(){
+      seg = seg + 1;
+      num.textContent = seg;
+      id = setTimeout(tick, 1000);   /* equivalente a ventana.after(1000, tick) */
+    }
+    id = setTimeout(tick, 1000);
+  });
+  document.getElementById("reloj-deta").addEventListener("click", function(){
+    clearTimeout(id); id = null;
+    estado.textContent = "Detenido en " + seg;
+  });
+  document.getElementById("reloj-cero").addEventListener("click", function(){
+    clearTimeout(id); id = null; seg = 0;
+    num.textContent = "0";
+    estado.textContent = "";
+  });
+})();
+
+/* ---------------- Resalta link activo ---------------- */
+const secciones = ["variables","fundamentos","ciclos","datos","funciones","tkinter","practica"];
+window.addEventListener("scroll", () => {
+  let actual = secciones[0];
+  secciones.forEach(s => {
+    if(document.getElementById(s).getBoundingClientRect().top <= 90) actual = s;
+  });
+  document.querySelectorAll("nav a").forEach(a =>
+    a.classList.toggle("activo", a.getAttribute("href") === "#" + actual));
+});
+</script>
+</body>
+</html>

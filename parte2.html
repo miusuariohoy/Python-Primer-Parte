@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guia Interactiva Parte 2 · Estructuras, Multimedia y Base de Datos · 5to</title>
+<style>
+:root{
+  --bg:#0b1220; --panel:#121b30; --panel2:#0d1526; --codigo:#080f1d;
+  --borde:#253352; --texto:#e2e8f0; --mut:#93a4bd;
+  --azul:#38bdf8; --verde:#34d399; --naranja:#fb923c; --rojo:#f87171;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--texto);
+  font-family:'Segoe UI',system-ui,Arial,sans-serif; line-height:1.55;
+}
+main{max-width:1080px; margin:0 auto; padding:1rem 1rem 3rem}
+
+header.top{
+  background:linear-gradient(135deg,#101c36,#0b1220);
+  border-bottom:1px solid var(--borde); padding:1.6rem 1rem;
+}
+header.top .inner{max-width:1080px; margin:0 auto}
+h1{margin:.1rem 0 .3rem; font-size:1.65rem}
+.sub{color:var(--mut); margin:0}
+.badges{display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.8rem}
+.badge{
+  font-size:.78rem; font-weight:600; letter-spacing:.03em;
+  padding:.28rem .75rem; border-radius:999px; border:1px solid var(--borde);
+  background:#16213c;
+}
+.badge.azul{color:var(--azul)} .badge.verde{color:var(--verde)}
+.badge.naranja{color:var(--naranja)}
+.volver{display:inline-block; margin-bottom:.4rem; color:var(--verde);
+  text-decoration:none; font-weight:600; font-size:.9rem}
+
+nav{
+  position:sticky; top:0; z-index:50; display:flex; flex-wrap:wrap; gap:.45rem;
+  padding:.6rem 1rem; background:rgba(11,18,32,.92); backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--borde);
+}
+nav a{
+  color:var(--mut); text-decoration:none; font-size:.88rem; font-weight:600;
+  padding:.35rem .8rem; border-radius:999px; border:1px solid transparent;
+}
+nav a:hover{color:var(--texto); border-color:var(--borde)}
+nav a.activo{color:var(--azul); border-color:var(--azul)}
+
+section{margin-top:2.2rem}
+h2{font-size:1.3rem; margin:0 0 .4rem}
+h2 .num{color:var(--azul)}
+h3{font-size:1.02rem; margin:0 0 .5rem}
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:14px}
+.card{
+  background:var(--panel); border:1px solid var(--borde);
+  border-radius:14px; padding:1rem 1.1rem; margin:.8rem 0;
+}
+.card h3{margin-top:0}
+.intro{color:var(--mut)}
+
+pre.codigo{
+  background:var(--codigo); border:1px solid var(--borde); border-radius:10px;
+  padding:.85rem 1rem; overflow-x:auto; font-size:.86rem; line-height:1.5;
+  font-family:Consolas,'Courier New',monospace; margin:.6rem 0;
+}
+code{
+  font-family:Consolas,'Courier New',monospace; font-size:.87em;
+  background:var(--codigo); border:1px solid var(--borde);
+  border-radius:6px; padding:.06em .35em; color:var(--naranja);
+}
+pre.codigo code{background:none; border:none; padding:0; color:inherit}
+.kw{color:var(--azul); font-weight:600}
+.fn{color:var(--verde)}
+.st{color:var(--naranja)}
+.nu{color:var(--verde)}
+.cm{color:#64748b; font-style:italic}
+
+table.datos{width:100%; border-collapse:collapse; font-size:.9rem; margin:.6rem 0}
+table.datos th{
+  text-align:left; color:var(--azul); border-bottom:2px solid var(--borde);
+  padding:.45rem .6rem;
+}
+table.datos td{border-bottom:1px solid var(--borde); padding:.45rem .6rem; vertical-align:top}
+table.datos tr:nth-child(even){background:#0f1930}
+
+.buenas{
+  border-left:4px solid var(--naranja); background:rgba(251,146,60,.08);
+  border-radius:0 10px 10px 0; padding:.75rem 1rem; margin:.8rem 0; font-size:.92rem;
+}
+.buenas strong{color:var(--naranja)}
+.alerta{
+  border-left:4px solid var(--rojo); background:rgba(248,113,113,.08);
+  border-radius:0 10px 10px 0; padding:.75rem 1rem; margin:.8rem 0; font-size:.92rem;
+}
+.alerta strong{color:var(--rojo)}
+.okbox{
+  border-left:4px solid var(--verde); background:rgba(52,211,153,.08);
+  border-radius:0 10px 10px 0; padding:.75rem 1rem; margin:.8rem 0; font-size:.92rem;
+}
+.okbox strong{color:var(--verde)}
+
+.tabs{display:flex; flex-wrap:wrap; gap:.4rem; margin:.8rem 0 0}
+.tabs button{
+  background:var(--panel); color:var(--mut); border:1px solid var(--borde);
+  border-radius:999px; padding:.45rem 1rem; cursor:pointer; font-weight:600; font-size:.88rem;
+}
+.tabs button:hover{color:var(--texto)}
+.tabs button.on{background:var(--azul); border-color:var(--azul); color:#06121f}
+.panel{display:none}
+.panel.on{display:block}
+
+.ejercicio{border-color:#20305a}
+.enun{margin:.2rem 0 .6rem}
+.zona-resp{margin:.6rem 0}
+input.resp{
+  background:var(--codigo); color:var(--texto); border:1px solid var(--borde);
+  border-radius:8px; padding:.42rem .6rem; font-family:Consolas,monospace;
+  font-size:.85rem; width:min(220px,90%);
+}
+input.resp.okk{border-color:var(--verde); color:var(--verde)}
+input.resp.mall{border-color:var(--rojo); color:var(--rojo)}
+button.btn{
+  background:var(--verde); color:#06121f; font-weight:700; border:none;
+  border-radius:9px; padding:.5rem 1.1rem; cursor:pointer; font-size:.9rem;
+}
+button.btn.sec{background:#26344f; color:var(--texto)}
+button.opcion{
+  display:block; width:100%; text-align:left; margin:.3rem 0;
+  background:var(--panel2); color:var(--texto); border:1px solid var(--borde);
+  border-radius:9px; padding:.5rem .8rem; cursor:pointer;
+  font-family:Consolas,monospace; font-size:.85rem;
+}
+button.opcion.okk{border-color:var(--verde); color:var(--verde); font-weight:700}
+button.opcion.mall{border-color:var(--rojo); color:var(--rojo)}
+.feedback{font-size:.9rem; font-weight:600; min-height:1.3rem; margin-top:.4rem}
+.feedback.ok{color:var(--verde)} .feedback.mal{color:var(--rojo)}
+details.solu{margin-top:.5rem; font-size:.9rem}
+details.solu summary{cursor:pointer; color:var(--azul); font-weight:600}
+
+/* Simulador tablas */
+.pantallita{
+  background:var(--codigo); border:1px solid var(--borde); border-radius:10px;
+  min-height:150px; max-height:230px; overflow-y:auto; padding:.7rem .9rem;
+  font-family:Consolas,monospace; font-size:.85rem; white-space:pre; color:#a7f3d0;
+}
+.fila-btns{display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.6rem}
+.fila-btns button{
+  background:#26344f; color:var(--texto); border:1px solid var(--borde);
+  border-radius:8px; padding:.4rem .85rem; cursor:pointer; font-weight:600;
+}
+.fila-btns button:hover{border-color:var(--azul)}
+
+/* Demo animacion */
+#demo-canvas{background:#0a1122; border:1px solid var(--borde); border-radius:10px; width:100%; display:block}
+
+.marcador{
+  position:sticky; bottom:0; z-index:40; background:rgba(11,18,32,.95);
+  border-top:1px solid var(--borde); padding:.55rem 1rem;
+}
+.marcador .inner{max-width:1080px; margin:0 auto; display:flex; align-items:center; gap:.9rem}
+
+@media (max-width:720px){
+  h1{font-size:1.25rem}
+  pre.codigo{font-size:.78rem}
+  .marcador .inner{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="inner">
+    <a class="volver" href="index.html">&larr; Volver a la Parte 1</a>
+    <h1>Guia Interactiva Parte 2 · Estructuras, Multimedia y Base de Datos</h1>
+    <p class="sub">Materia: Programacion &middot; 5to Año &middot; Escuela Tecnica</p>
+    <div class="badges">
+      <span class="badge azul">LISTAS · TUPLAS · DICCIONARIOS</span>
+      <span class="badge verde">CANVAS + IMAGEN + ANIMACION</span>
+      <span class="badge naranja">PYGAME MIXER (MUSICA)</span>
+      <span class="badge">FORMULARIO + MYSQL</span>
+    </div>
+  </div>
+</header>
+
+<nav id="barranav">
+  <a href="#listas">1 · Listas</a>
+  <a href="#tuplas">2 · Tuplas</a>
+  <a href="#diccionarios">3 · Diccionarios</a>
+  <a href="#text-lambda">4 · Text, state y lambda</a>
+  <a href="#canvas">5 · Canvas e imagen</a>
+  <a href="#musica">6 · Musica con pygame</a>
+  <a href="#basedatos">7 · Formulario + MySQL</a>
+  <a href="#practica">8 · Practica</a>
+</nav>
+
+<main>
+
+<!-- ==================================================== -->
+<section id="listas">
+  <h2><span class="num">1.</span> Listas: muchas cosas en una sola caja</h2>
+  <p class="intro">Una lista guarda <strong>varios valores juntos</strong> y en
+  orden, como un estante con casilleros numerados. Cada valor vive en una
+  <strong>posicion</strong> que arranca a contar desde <strong>0</strong>.</p>
+
+<pre class="codigo">cursos = [<span class="st">"1A"</span>, <span class="st">"2A"</span>, <span class="st">"3A"</span>, <span class="st">"4A"</span>]     <span class="cm"># asi empieza planilla.py</span>
+
+<span class="fn">print</span>(cursos[<span class="nu">0</span>])          <span class="cm"># 1A    (el primero)</span>
+<span class="fn">print</span>(cursos[<span class="nu">2</span>])          <span class="cm"># 3A    (tercera posicion)</span>
+<span class="fn">print</span>(<span class="fn">len</span>(cursos))        <span class="cm"># 4     (cantidad de elementos)</span></pre>
+
+  <table class="datos">
+    <tr><th>Accion</th><th>Codigo</th><th>Que hace</th></tr>
+    <tr><td>leer una posicion</td><td><code>cursos[1]</code></td><td>devuelve "2A"</td></tr>
+    <tr><td>cambiar un valor</td><td><code>cursos[0] = "5A"</code></td><td>pisa el primero</td></tr>
+    <tr><td>agregar al final</td><td><code>cursos.append("5B")</code></td><td>crece la lista</td></tr>
+    <tr><td>insertar en medio</td><td><code>cursos.insert(1, "6A")</code></td><td>corre al resto</td></tr>
+    <tr><td>sacar un valor</td><td><code>cursos.remove("3A")</code></td><td>borra ese dato</td></tr>
+    <tr><td>ordenar</td><td><code>cursos.sort()</code></td><td>alfanumerico ascendente</td></tr>
+    <tr><td>recorrer con indice</td><td><code>for i in range(len(cursos)):</code></td><td>i pasa por 0,1,2...</td></tr>
+  </table>
+
+<pre class="codigo"><span class="cm"># Asi muestra el menu la planilla.py:</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(cursos)):
+    <span class="fn">print</span>(i, <span class="st">"-"</span>, cursos[i])
+
+indice = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st">"Seleccione indice del curso: "</span>))
+<span class="fn">print</span>(<span class="st">"Elegiste:"</span>, cursos[indice])</pre>
+
+  <div class="alerta"><strong>Error clasico:</strong>
+  <code>cursos[4]</code> con 4 elementos da <b>IndexError</b>: las posiciones van
+  de 0 a 3. El ultimo siempre es <code>len(lista) - 1</code>.</div>
+  <div class="buenas"><strong>Buena practica:</strong> cuando muestres un menu
+  numerado, usa ese mismo indice para leer la lista: cero traducciones y cero
+  errores.</div>
+</section>
+
+<!-- ==================================================== -->
+<section id="tuplas">
+  <h2><span class="num">2.</span> Tuplas: listas que no se cambian</h2>
+  <p class="intro">Una tupla es igual a una lista pero <strong>congelada</strong>:
+  se define con parentesis y despues <strong>no se puede modificar</strong>.
+  Analogia: la lista es una carpeta donde podes agregar hojas; la tupla es un
+  libro impreso.</p>
+
+<pre class="codigo">punto = (<span class="nu">120</span>, <span class="nu">140</span>)          <span class="cm"># coordenada fija (x, y)</span>
+dias = (<span class="st">"lunes"</span>, <span class="st">"martes"</span>, <span class="st">"miercoles"</span>)
+
+<span class="fn">print</span>(punto[<span class="nu">0</span>])             <span class="cm"># leer si se puede: 120</span>
+x, y = punto                 <span class="cm"># desempaquetar: x=120, y=140</span></pre>
+
+  <table class="datos">
+    <tr><th></th><th>Lista [ ]</th><th>Tupla ( )</th></tr>
+    <tr><td>Modificar / agregar / borrar</td><td>si (append, remove...)</td><td><strong>NO: error TypeError</strong></td></tr>
+    <tr><td>Leer posiciones</td><td>si</td><td>si</td></tr>
+    <tr><td>Para que sirve</td><td>datos que cambian</td><td>datos fijos (constantes)</td></tr>
+    <tr><td>Ejemplo real</td><td>notas del alumno</td><td>tamanio de la ventana, coordenada inicial</td></tr>
+  </table>
+
+  <div class="okbox"><strong>Donde ya la usaste sin darte cuenta:</strong> en
+  <code>font=("arial", 20)</code> y en el SQL del formulario:
+  <code>cursor.execute(sql, (nombre, curso))</code>. Los parentesis que pasan
+  varios datos juntos suelen ser tuplas.</div>
+</section>
+
+<!-- ==================================================== -->
+<section id="diccionarios">
+  <h2><span class="num">3.</span> Diccionarios: cada dato con su etiqueta</h2>
+  <p class="intro">Un diccionario guarda pares <strong>clave : valor</strong>,
+  como una ficha de alumno: en vez de recordar "la posicion 1 es el apellido",
+  preguntas directo por <code>"apellido"</code>.</p>
+
+<pre class="codigo">alumno = {
+    <span class="st">"nombre"</span>: <span class="st">"Ana"</span>,
+    <span class="st">"curso"</span>: <span class="st">"3A"</span>,
+    <span class="st">"notas"</span>: [<span class="nu">8</span>, <span class="nu">7</span>, <span class="nu">9</span>]
+}
+
+<span class="fn">print</span>(alumno[<span class="st">"nombre"</span>])      <span class="cm"># Ana</span>
+alumno[<span class="st">"turno"</span>] = <span class="st">"Tarde"</span>      <span class="cm"># agregar una clave nueva</span>
+alumno[<span class="st">"curso"</span>] = <span class="st">"4A"</span>         <span class="cm"># sobreescribir</span></pre>
+
+  <table class="datos">
+    <tr><th>Accion</th><th>Codigo</th><th>Devuelve</th></tr>
+    <tr><td>leer</td><td><code>alumno["nombre"]</code></td><td>el valor de esa clave</td></tr>
+    <tr><td>leer sin riesgo</td><td><code>alumno.get("edad", "no esta")</code></td><td>el default si no existe</td></tr>
+    <tr><td>agregar / cambiar</td><td><code>alumno[clave] = valor</code></td><td>-</td></tr>
+    <tr><td>todas las claves</td><td><code>alumno.keys()</code></td><td>dict_keys([...])</td></tr>
+    <tr><td>pares clave-valor</td><td><code>alumno.items()</code></td><td>pares para recorrer</td></tr>
+  </table>
+
+<pre class="codigo"><span class="kw">for</span> clave, valor <span class="kw">in</span> alumno.<span class="fn">items</span>():
+    <span class="fn">print</span>(clave, <span class="st">"-&gt;"</span>, valor)
+
+promedio = <span class="fn">sum</span>(alumno[<span class="st">"notas"</span>]) / <span class="fn">len</span>(alumno[<span class="st">"notas"</span>])
+<span class="fn">print</span>(<span class="fn">f"Promedio de {alumno['nombre']}: {promedio}"</span>)</pre>
+
+  <div class="alerta"><strong>Diferencia clave:</strong> la lista accede por
+  <b>numero</b> (<code>cursos[2]</code>), el diccionario por <b>etiqueta</b>
+  (<code>alumno["curso"]</code>). KeyError = esa etiqueta no existe.</div>
+</section>
+
+<!-- ==================================================== -->
+<section id="text-lambda">
+  <h2><span class="num">4.</span> Tkinter avanzado: Text, state y lambda</h2>
+  <p class="intro">Aca entra el corazon de <em>LasTablas.py</em>: un widget
+  <strong>Text</strong> grande donde escribir muchas lineas, botones que envian
+  datos con <strong>lambda</strong>, y el atributo <strong>state</strong> para
+  bloquear o habilitar.</p>
+
+  <div class="tabs" data-tabs="t-tl">
+    <button class="on" data-p="tl-text">Widget Text</button>
+    <button data-p="tl-tabla">El caso LasTablas</button>
+    <button data-p="tl-state">state</button>
+    <button data-p="tl-lambda">lambda</button>
+  </div>
+
+  <div class="card panel on" id="tl-text">
+<pre class="codigo">texto_tabla = <span class="fn">Text</span>(frame3)
+texto_tabla.config(bg=<span class="st">"turquoise"</span>, width=<span class="nu">80</span>, height=<span class="nu">17</span>)
+texto_tabla.pack(padx=<span class="nu">10</span>, pady=<span class="nu">10</span>)</pre>
+    <table class="datos">
+      <tr><th>Accion</th><th>Linea</th><th>Notas</th></tr>
+      <tr><td>escribir al final</td><td><code>texto.insert(END, "hola\n")</code></td><td>\n = salto de linea</td></tr>
+      <tr><td>borrar TODO</td><td><code>texto.delete("1.0", END)</code></td><td>"1.0" = linea 1, caracter 0</td></tr>
+      <tr><td>leer todo</td><td><code>texto.get("1.0", END)</code></td><td>devuelve str</td></tr>
+    </table>
+    <div class="alerta"><strong>Ojo:</strong> Entry borra con
+    <code>(0, END)</code> pero Text borra con <code>("1.0", END)</code>: el Text
+    usa notacion linea.caracter porque tiene varias lineas.</div>
+  </div>
+
+  <div class="card panel" id="tl-tabla">
+<h3>La funcion exacta del proyecto</h3>
+<pre class="codigo"><span class="kw">def</span> <span class="fn">mostrar_tabla</span>(n):
+    texto_tabla.delete(<span class="st">"1.0"</span>, END)              <span class="cm"># limpia lo anterior</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nu">1</span>, <span class="nu">11</span>):                       <span class="cm"># vueltas: 1 a 10</span>
+        texto_tabla.insert(END, <span class="fn">f"{n}*{i}={n*i}"</span> + <span class="st">"\n"</span>)</pre>
+    <ol style="padding-left:1.3rem; font-size:.93rem">
+      <li>Borra el contenido viejo (si no, las tablas se mezclarian).</li>
+      <li>Recorre 1..10 con for.</li>
+      <li>En cada vuelta inserta UNA linea al final (END).</li>
+    </ol>
+    <p class="intro">Probalo abajo en el simulador de la practica.</p>
+  </div>
+
+  <div class="card panel" id="tl-state">
+    <h3>state: habilitar y bloquear</h3>
+    <table class="datos">
+      <tr><th>Valor</th><th>Efecto</th><th>Uso tipico</th></tr>
+      <tr><td><code>state=NORMAL</code></td><td>activo, responde</td><td>estado normal</td></tr>
+      <tr><td><code>state=DISABLED</code></td><td>bloqueado, gris</td><td>boton "Guardar" sin conexion</td></tr>
+      <tr><td><code>state=READONLY</code></td><td>muestra pero no edita</td><td>resultado calculado</td></tr>
+    </table>
+<pre class="codigo">boton_guardar = <span class="fn">Button</span>(ventana, text=<span class="st">"Guardar"</span>, state=DISABLED)
+...
+<span class="cm"># mas tarde, cuando todo este listo:</span>
+boton_guardar.config(state=NORMAL)</pre>
+    <div class="buenas"><strong>Buena practica:</strong> deshabilita botones
+    cuya accion todavia no tiene sentido (evita errores del usuario en vez de
+    corregirlos despues).</div>
+  </div>
+
+  <div class="card panel" id="tl-lambda">
+    <h3>lambda: funciones de un solo uso</h3>
+    <p><code>command=</code> no acepta enviar datos entre parentesis... salvo
+    que envuelvas la llamada en una funcion anonima:</p>
+<pre class="codigo">boton1 = <span class="fn">Button</span>(frame2, text=<span class="st">"1"</span>, command=lambda: <span class="fn">mostrar_tabla</span>(<span class="nu">1</span>))
+boton7 = <span class="fn">Button</span>(frame2, text=<span class="st">"7"</span>, command=lambda: <span class="fn">mostrar_tabla</span>(<span class="nu">7</span>))</pre>
+    <table class="datos">
+      <tr><th>Forma</th><th>Que pasa</th></tr>
+      <tr><td><code>command=mostrar_tabla</code></td><td>falta el numero n: error al hacer click</td></tr>
+      <tr><td><code>command=mostrar_tabla(7)</code></td><td>se ejecuta YA al crear el boton (mal)</td></tr>
+      <tr><td><code>command=lambda: mostrar_tabla(7)</code></td><td>espera el click Y manda el 7 (correcto)</td></tr>
+    </table>
+    <div class="okbox"><strong>Lectura:</strong> lambda crea una mini-funcion
+    sin nombre que solo dice "llama a mostrar_tabla con 7". Es la valija que
+    guarda la llamada para mas tarde.</div>
+  </div>
+</section>
+
+<!-- ==================================================== -->
+<section id="canvas">
+  <h2><span class="num">5.</span> Canvas: dibujar, poner imagen y animar</h2>
+  <p class="intro">El <strong>Canvas</strong> es un lienzo donde se colocan
+  formas e imagenes, y cada objeto queda identificado por un
+  <strong>id</strong> para poder moverlo despues. Es el escenario del sapo de
+  <em>LasTablas.py</em>.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Crear lienzo e imagen</h3>
+<pre class="codigo"><span class="kw">from</span> PIL <span class="kw">import</span> Image, ImageTk
+
+canvas = <span class="fn">Canvas</span>(frame5, width=<span class="nu">1500</span>, height=<span class="nu">90</span>)
+canvas.pack()
+
+img = Image.open(<span class="st">"Sapo.jfif"</span>).resize((<span class="nu">100</span>,<span class="nu">100</span>))
+img_Tk = ImageTk.PhotoImage(img)
+
+sapo = canvas.create_image(<span class="nu">100</span>, <span class="nu">55</span>, image=img_Tk)</pre>
+      <p class="intro"><code>create_image(x, y, image=...)</code> devuelve el
+      <strong>id</strong> del objeto (aca, <code>sapo</code>).</p>
+    </div>
+    <div class="card">
+      <h3>Moverlo en cada vuelta</h3>
+<pre class="codigo"><span class="cm"># Mueve la imagen a la nueva posición</span>
+canvas.coords(sapo, x, ALTO // <span class="nu">2</span>)</pre>
+      <p class="intro"><code>coords(id, x, y)</code> teletransporta el objeto a
+      esa posicion. Cambiar las coordenadas muchas veces seguidas = animacion.</p>
+    </div>
+  </div>
+
+<h3>La animacion completa: rebote izquierda-derecha</h3>
+<pre class="codigo">x, direccion = <span class="nu">100</span>, <span class="nu">1</span>            <span class="cm"># direccion 1=derecha, -1=izquierda</span>
+
+<span class="kw">def</span> <span class="fn">mover</span>():
+    <span class="kw">global</span> x, direccion
+    x += <span class="nu">10</span> * direccion           <span class="cm"># avanza 10 px por vuelta</span>
+    <span class="kw">if</span> x &lt;= <span class="nu">100</span> <span class="kw">or</span> x &gt; <span class="nu">1300</span> - <span class="nu">100</span>:
+        direccion *= -<span class="nu">1</span>           <span class="cm"># toco un borde: invierte el sentido</span>
+    canvas.coords(sapo, x, ALTO // <span class="nu">2</span>)
+    base.after(<span class="nu">30</span>, mover)          <span class="cm"># re-agenda: ~33 cuadros por segundo</span>
+
+<span class="fn">mover</span>()                            <span class="cm"># primera llamada: arranca el loop</span></pre>
+  <ul style="font-size:.93rem; padding-left:1.3rem">
+    <li><code>x += 10 * direccion</code>: suma si direccion vale 1, resta si vale -1.</li>
+    <li>El <code>if</code> de bordes multiplica direccion por -1: rebota.</li>
+    <li><code>after(30, mover)</code> re-agenda: mismo patron del cronometro de la Parte 1.</li>
+  </ul>
+
+  <div class="card">
+    <h3>Simulacion del concepto</h3>
+    <canvas id="demo-canvas" width="600" height="70"></canvas>
+    <div class="fila-btns">
+      <button class="btn" id="demo-ini">Iniciar animacion</button>
+      <button class="btn sec" id="demo-sto">Detener</button>
+    </div>
+    <p class="intro">Cada cuadrito avanza 10px y rebota en los bordes: es el
+    sapo, con otro disfraz.</p>
+  </div>
+
+  <div class="alerta"><strong>Error clasico con imagenes:</strong> guardar
+  <code>img_Tk</code> solo dentro de una funcion hace que la imagen desaparezca
+  (el recolector la borra). Guardala en una variable global.</div>
+</section>
+
+<!-- ==================================================== -->
+<section id="musica">
+  <h2><span class="num">6.</span> Musica de fondo con pygame</h2>
+  <p class="intro">Pygame trae un reproductor de sonido (<code>mixer</code>) que
+  puede sonar mientras la ventana sigue andando: perfecto para ponerle musica a
+  <em>LasTablas</em>.</p>
+
+<pre class="codigo"><span class="kw">import</span> pygame
+
+<span class="fn">pygame.mixer.init</span>()                        <span class="cm"># 1) enciende el sistema de audio</span>
+musica_tablas = <span class="st">"musica_tablas.mp3"</span>          <span class="cm"># archivo en la MISMA carpeta</span>
+<span class="fn">pygame.mixer.music.load</span>(musica_tablas)      <span class="cm"># 2) carga el archivo</span>
+pygame.mixer.music.play(-<span class="nu">1</span>)                 <span class="cm"># 3) reproduce en LOOP infinito</span></pre>
+
+  <table class="datos">
+    <tr><th>Linea</th><th>Que hace</th></tr>
+    <tr><td><code>pygame.mixer.init()</code></td><td>prepara el hardware de audio (una sola vez)</td></tr>
+    <tr><td><code>music.load(archivo)</code></td><td>carga mp3/wav/ogg a memoria</td></tr>
+    <tr><td><code>music.play(-1)</code></td><td>reproduce y repite para SIEMPRE (-1 = loop infinito)</td></tr>
+    <tr><td><code>music.play(3)</code></td><td>suena 3 veces y para</td></tr>
+    <tr><td><code>music.stop()</code></td><td>corta la reproduccion</td></tr>
+  </table>
+
+  <div class="okbox"><strong>Por que -1?</strong> El argumento es "cuantas veces
+  repetir". Con 0 suena una vez, con 3 suena tres veces, con -1 el ciclo nunca
+  termina: musica de fondo eterna.</div>
+
+  <div class="alerta"><strong>Errores tipicos:</strong>
+  <ul style="margin:.3rem 0 0; padding-left:1.2rem">
+    <li>No llamar <code>init()</code> antes de load/play.</li>
+    <li>Ruta mal escrita: el archivo debe estar junto al .py (o pasar la ruta completa).</li>
+    <li>Formato no soportado: proba mp3 u ogg.</li>
+  </ul></div>
+  <div class="buenas"><strong>Idea integradora:</strong> podes combinar todo:
+  boton "Musica ON/OFF" con <code>command=lambda: pygame.mixer.music.stop()</code>
+  o con una funcion propia que alterne.</div>
+</section>
+
+<!-- ==================================================== -->
+<section id="basedatos">
+  <h2><span class="num">7.</span> Formulario con base de datos (MySQL)</h2>
+  <p class="intro">Meta final: una ventana donde cargar un alumno (nombre +
+  curso) y guardarlo en MySQL. Tres piezas: <strong>ttk</strong> para el
+  Combobox, <strong>messagebox</strong> para avisos, y
+  <strong>mysql.connector</strong> para hablar con la base.</p>
+
+<pre class="codigo"><span class="kw">from</span> tkinter <span class="kw">import</span> ttk             <span class="cm"># Widgets mejorados: el Combobox (lista desplegable)</span>
+<span class="kw">from</span> tkinter <span class="kw">import</span> messagebox      <span class="cm"># Ventanitas de aviso: showinfo, showwarning, showerror</span>
+<span class="kw">import</span> mysql.connector</pre>
+
+  <table class="datos">
+    <tr><th>messagebox</th><th>Cuando usarla</th><th>Icono</th></tr>
+    <tr><td><code>showinfo(titulo, texto)</code></td><td>operacion exitosa</td><td>i azul</td></tr>
+    <tr><td><code>showwarning(titulo, texto)</code></td><td>falta un dato / algo raro</td><td>!</td></tr>
+    <tr><td><code>showerror(titulo, texto)</code></td><td>fallo grave (conexion)</td><td>X roja</td></tr>
+  </table>
+
+<div class="card">
+<h3>Conexion y guardado paso a paso</h3>
+<pre class="codigo"><span class="kw">def</span> <span class="fn">conectar</span>():
+    <span class="kw">return</span> mysql.connector.connect(
+        host=<span class="st">"localhost"</span>,
+        user=<span class="st">"root"</span>,
+        password=<span class="st">""</span>,
+        database=<span class="st">"escuela"</span>
+    )
+
+<span class="kw">def</span> <span class="fn">guardar</span>():
+    nombre = entrada_nombre.get()
+    curso = combo_curso.get()
+
+    <span class="kw">if</span> nombre == <span class="st">""</span> <span class="kw">or</span> curso == <span class="st">""</span>:
+        messagebox.<span class="fn">showwarning</span>(<span class="st">"Falta dato"</span>, <span class="st">"Completa todos los campos"</span>)
+        <span class="kw">return</span>
+
+    <span class="kw">try</span>:
+        cnx = <span class="fn">conectar</span>()
+        cursor = cnx.cursor()
+        sql = <span class="st">"INSERT INTO alumnos (nombre, curso) VALUES (%s, %s)"</span>
+        cursor.execute(sql, (nombre, curso))     <span class="cm"># los valores viajan en una TUPLA</span>
+        cnx.commit()                             <span class="cm"># confirma el cambio</span>
+        cnx.close()
+        messagebox.<span class="fn">showinfo</span>(<span class="st">"Guardado"</span>, <span class="st">"Alumno agregado con exito"</span>)
+    <span class="kw">except</span>:
+        messagebox.<span class="fn">showerror</span>(<span class="st">"Error"</span>, <span class="st">"No se pudo conectar a la base"</span>)</pre>
+
+<h3>El Combobox (desplegable de ttk)</h3>
+<pre class="codigo">combo_curso = ttk.<span class="fn">Combobox</span>(ventana, values=[<span class="st">"1A"</span>, <span class="st">"2A"</span>, <span class="st">"3A"</span>, <span class="st">"4A"</span>])
+combo_curso.current(<span class="nu">0</span>)          <span class="cm"># preselecciona el primero</span>
+combo_curso.pack()</pre>
+</div>
+
+  <table class="datos">
+    <tr><th>Paso</th><th>Linea</th><th>Si falta...</th></tr>
+    <tr><td>1. abrir conexion</td><td><code>connect(host, user, password, database)</code></td><td>todo lo demas falla</td></tr>
+    <tr><td>2. crear cursor</td><td><code>cnx.cursor()</code></td><td>no hay quien ejecute SQL</td></tr>
+    <tr><td>3. ejecutar</td><td><code>cursor.execute(sql, tupla_valores)</code></td><td>nada llega a la base</td></tr>
+    <tr><td>4. confirmar</td><td><code>cnx.commit()</code></td><td>el INSERT se pierde al cerrar</td></tr>
+    <tr><td>5. cerrar</td><td><code>cnx.close()</code></td><td>conexiones colgadas</td></tr>
+  </table>
+
+  <div class="alerta"><strong>Error clasico Nº1:</strong> olvidar
+  <code>commit()</code>. El programa dice que guardo, pero al abrir phpMyAdmin
+  no hay nada: la operacion quedo pendiente.</div>
+  <div class="buenas"><strong>Buena practica:</strong> validar ANTES de tocar la
+  base (campos vacios con showwarning) y proteger la conexion con try/except
+  para responder con showerror si MySQL esta apagado.</div>
+</section>
+
+<!-- ==================================================== -->
+<section id="practica">
+  <h2><span class="num">8.</span> Practica interactiva</h2>
+  <p class="intro"><strong>12 ejercicios</strong> sobre los temas de esta parte.
+  Correccion instantanea verde/rojo y solucion explicada.</p>
+
+  <!-- P1 -->
+  <div class="card ejercicio" data-ej="1">
+    <h3>Ejercicio 1 · Posiciones de lista</h3>
+<pre class="codigo">cursos = [<span class="st">"1A"</span>, <span class="st">"2A"</span>, <span class="st">"3A"</span>, <span class="st">"4A"</span>]
+<span class="fn">print</span>(cursos[<span class="nu">1</span>])
+<span class="fn">print</span>(<span class="fn">len</span>(cursos))</pre>
+    <p class="enun">Que imprime?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">1A y 4</button>
+      <button class="opcion" data-correct="1">2A y 4</button>
+      <button class="opcion" data-correct="0">3A y 3</button>
+      <button class="opcion" data-correct="0">IndexError</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion</summary>
+      La posicion 1 contiene "2A" (arranca en 0) y len devuelve la cantidad
+      total: 4.
+    </details>
+  </div>
+
+  <!-- P2 -->
+  <div class="card ejercicio" data-ej="2">
+    <h3>Ejercicio 2 · Crece la lista (append)</h3>
+<pre class="codigo">turnos = [<span class="st">"Mañana"</span>, <span class="st">"Tarde"</span>]
+turnos.append(<span class="st">"Noche"</span>)
+<span class="fn">print</span>(<span class="fn">len</span>(turnos))
+<span class="fn">print</span>(turnos[<span class="nu">2</span>])</pre>
+    <p class="enun">Que aparece?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">2 y Mañana</button>
+      <button class="opcion" data-correct="0">3 y Tarde</button>
+      <button class="opcion" data-correct="1">3 y Noche</button>
+      <button class="opcion" data-correct="0">IndexError: la lista tiene 2</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion</summary>
+      append agrega al FINAL: la lista queda con 3 elementos y "Noche" ocupa la
+      posicion 2 (la ultima).
+    </details>
+  </div>
+
+  <!-- P3 -->
+  <div class="card ejercicio" data-ej="3">
+    <h3>Ejercicio 3 · Lista o tupla?</h3>
+    <p class="enun">Necesitas guardar la coordenada inicial (x, y) de un sprite,
+    que NUNCA cambia. Que estructura conviene?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">lista: [120, 140]</button>
+      <button class="opcion" data-correct="1">tupla: (120, 140)</button>
+      <button class="opcion" data-correct="0">diccionario: {"x":120}</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion</summary>
+      Datos fijos = tupla. Al ser inmutable, nadie puede pisarlos por accidente.
+      Ademas es justo lo que espera font=("arial", 20).
+    </details>
+  </div>
+
+  <!-- P4 -->
+  <div class="card ejercicio" data-ej="4">
+    <h3>Ejercicio 4 · Acceso por etiqueta</h3>
+<pre class="codigo">alumno = {<span class="st">"nombre"</span>: <span class="st">"Ana"</span>, <span class="st">"curso"</span>: <span class="st">"3A"</span>}
+<span class="fn">print</span>(alumno[<span class="st">"curso"</span>])</pre>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">0</button>
+      <button class="opcion" data-correct="0">Ana</button>
+      <button class="opcion" data-correct="1">3A</button>
+      <button class="opcion" data-correct="0">KeyError</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion</summary>
+      El diccionario se consulta por CLAVE, no por posicion: "curso" devuelve
+      "3A". KeyError seria si la clave no existiera (por ejemplo "apellido").
+    </details>
+  </div>
+
+  <!-- P5 -->
+  <div class="card ejercicio" data-ej="5">
+    <h3>Ejercicio 5 · Agregar una clave</h3>
+    <p class="enun">Queres guardar el turno del alumno. Que linea lo logra?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">alumno.add("turno", "Tarde")</button>
+      <button class="opcion" data-correct="1">alumno["turno"] = "Tarde"</button>
+      <button class="opcion" data-correct="0">alumno.append("Tarde")</button>
+      <button class="opcion" data-correct="0">turno = alumno</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion</summary>
+      Asignando una clave nueva con corchetes se agrega (o pisa, si ya existia).
+      add/append son de otros estructuras, no del dict.
+    </details>
+  </div>
+
+  <!-- P6 -->
+  <div class="card ejercicio" data-ej="6">
+    <h3>Ejercicio 6 · El bucle de las tablas (Text + for)</h3>
+    <p class="enun">Completa el rango para recorrer del 1 al 10 INCLUYENDO el 10:</p>
+<pre class="codigo">def mostrar_tabla(n):
+    texto_tabla.delete("1.0", END)
+    for i in <input class="resp" data-ok="range(1,11)" size="14" maxlength="16"> :
+        texto_tabla.insert(END, f"{n}*{i}={n*i}\n")</pre>
+    <div class="zona-resp">
+      <button class="btn" data-corregir="6">Corregir</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion</summary>
+      range(1, 11) genera 1..10 (el final nunca se incluye, por eso va 11).
+      Acepta tambien escrito con espacio: range(1, 11).
+    </details>
+  </div>
+
+  <!-- P7 -->
+  <div class="card ejercicio" data-ej="7">
+    <h3>Ejercicio 7 · Bloquear hasta estar listo (state)</h3>
+    <p class="enun">El boton Guardar debe aparecer bloqueado al abrir la ventana.
+    Como se crea?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="1">Button(ventana, text="Guardar", state=DISABLED)</button>
+      <button class="opcion" data-correct="0">Button(ventana, text="Guardar", state=OFF)</button>
+      <button class="opcion" data-correct="0">Button(ventana, text="Guardar", disabled=True)</button>
+      <button class="opcion" data-correct="0">Button(ventana, text="Guardar").block()</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion</summary>
+      DISABLED lo gris y bloquea; despues se re-habilita con
+      <code>.config(state=NORMAL)</code>.
+    </details>
+  </div>
+
+  <!-- P8 -->
+  <div class="card ejercicio" data-ej="8">
+    <h3>Ejercicio 8 · Diez botones, una funcion (lambda)</h3>
+    <p class="enun">En LasTablas los botones 1..10 llaman a la misma funcion con
+    distinto numero. Por que se usa lambda?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">Porque lambda hace el boton mas rapido</button>
+      <button class="opcion" data-correct="1">Porque command no admite argumentos: lambda guarda la llamada mostrar_tabla(n) para el click</button>
+      <button class="opcion" data-correct="0">Porque lambda reemplaza al mainloop</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion</summary>
+      command=mostrar_tabla(7) ejecutaria YA la funcion al crear el boton.
+      lambda: mostrar_tabla(7) empaqueta esa llamada para que ocurra recien al
+      hacer click.
+    </details>
+  </div>
+
+  <!-- P9 -->
+  <div class="card ejercicio" data-ej="9">
+    <h3>Ejercicio 9 · Mover el sprite (coords)</h3>
+    <p class="enun">Que hace exactamente
+    <code>canvas.coords(sapo, x, ALTO // 2)</code>?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">Redimensiona la imagen del sapo</button>
+      <button class="opcion" data-correct="1">Coloca al sapo en la posicion (x, mitad de altura): lo mueve</button>
+      <button class="opcion" data-correct="0">Crea un nuevo sapo en el centro</button>
+      <button class="opcion" data-correct="0">Devuelve las coordenadas actuales</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion</summary>
+      coords() REUBICA el objeto identificado por su id en las coordenadas dadas.
+      Llamarlo muchas veces (via after) genera la animacion.
+    </details>
+  </div>
+
+  <!-- P10 -->
+  <div class="card ejercicio" data-ej="10">
+    <h3>Ejercicio 10 · Loop infinito de musica (play(-1))</h3>
+    <p class="enun">Que significa el -1 en
+    <code>pygame.mixer.music.play(-1)</code>?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">Reproduce hacia atras</button>
+      <button class="opcion" data-correct="0">Reproduce una vez y silencia</button>
+      <button class="opcion" data-correct="1">Repite PARA SIEMPRE hasta que se llame stop()</button>
+      <button class="opcion" data-correct="0">Baja el volumen al minimo</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion</summary>
+      El parametro es la cantidad de repeticiones: 0 = una vez, 3 = tres veces,
+      -1 = loop infinito. Ideal para musica de fondo.
+    </details>
+  </div>
+
+  <!-- P11 -->
+  <div class="card ejercicio" data-ej="11">
+    <h3>Ejercicio 11 · El commit olvidado (MySQL)</h3>
+    <p class="enun">El formulario dice "Guardado", pero phpMyAdmin no muestra la
+    fila. Que linea falta?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">cursor.execute(sql, valores) otra vez</button>
+      <button class="opcion" data-correct="1">cnx.commit()</button>
+      <button class="opcion" data-correct="0">cnx.close()</button>
+      <button class="opcion" data-correct="0">messagebox.showinfo otra vez</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion</summary>
+      Sin commit() la operacion queda pendiente y se descarta al cerrar.
+      Orden correcto: execute -> commit -> close.
+    </details>
+  </div>
+
+  <!-- P12 -->
+  <div class="card ejercicio" data-ej="12">
+    <h3>Ejercicio 12 · Ventanita adecuada (messagebox)</h3>
+    <p class="enun">El usuario aprieta Guardar con el nombre vacio. Que ventanita
+    corresponde?</p>
+    <div class="zona-resp">
+      <button class="opcion" data-correct="0">showerror("Error", "...")</button>
+      <button class="opcion" data-correct="1">showwarning("Falta dato", "Completa todos los campos")</button>
+      <button class="opcion" data-correct="0">showinfo("Guardado", "...")</button>
+    </div>
+    <div class="feedback"></div>
+    <details class="solu"><summary>Ver resolucion</summary>
+      Campo vacio = advertencia (algo falto, no exploto nada). showerror queda
+      para fallos de conexion; showinfo para exito.
+    </details>
+  </div>
+
+  <!-- SIMULADOR TABLAS -->
+  <div class="card" id="sim-tablas">
+    <h3>Simulador · mostrar_tabla(n)</h3>
+    <p class="intro">Igual que LasTablas: aprieta un numero y mira como el for
+    llena el Text linea por linea. Borrar = delete("1.0", END).</p>
+    <div class="fila-btns" id="tablas-btns"></div>
+    <div class="fila-btns">
+      <button class="btn sec" id="tablas-clear">Borrar (delete 1.0 END)</button>
+    </div>
+    <div class="pantallita" id="tablas-out"></div>
+  </div>
+</section>
+
+<footer style="text-align:center; color:var(--mut); font-size:.85rem; margin-top:2.5rem">
+  Guia Interactiva Parte 2 · Estructuras de datos, multimedia y base de datos · 5to Ano Tecnico
+</footer>
+
+</main>
+
+<div class="marcador">
+  <div class="inner">
+    <strong style="font-size:.9rem">Progreso</strong>
+    <div style="flex:1; height:10px; background:#18233c; border-radius:999px; overflow:hidden">
+      <div id="barra-prog" style="height:100%; width:0%; background:var(--verde); transition:width .3s"></div>
+    </div>
+    <span id="marcador-txt" style="font-size:.9rem; color:var(--mut)">0 / 12</span>
+  </div>
+</div>
+
+<script>
+/* ---------------- Pestañas ---------------- */
+document.querySelectorAll(".tabs").forEach(function(grupo){
+  grupo.addEventListener("click", function(e){
+    if(e.target.tagName !== "BUTTON") return;
+    grupo.querySelectorAll("button").forEach(function(b){ b.classList.remove("on"); });
+    e.target.classList.add("on");
+    var paneles = [];
+    var hermano = grupo.nextElementSibling;
+    while(hermano && hermano.classList.contains("panel")){
+      paneles.push(hermano);
+      hermano = hermano.nextElementSibling;
+    }
+    paneles.forEach(function(p){ p.classList.remove("on"); });
+    document.getElementById(e.target.dataset.p).classList.add("on");
+  });
+});
+
+/* ---------------- Marcador ---------------- */
+const TOTAL = 12;
+const resueltos = new Set();
+function marcarResuelto(n){
+  resueltos.add(String(n));
+  const cant = resueltos.size;
+  document.getElementById("barra-prog").style.width = (cant / TOTAL * 100) + "%";
+  document.getElementById("marcador-txt").textContent = cant + " / " + TOTAL;
+}
+function normalizar(t){
+  return t.trim().toLowerCase().replace(/\s+/g, "").replace(/["']/g, "");
+}
+
+/* ---------------- Ejercicios ---------------- */
+document.querySelectorAll(".ejercicio").forEach(function(card){
+  const num = card.dataset.ej;
+  const fb = card.querySelector(".feedback");
+
+  card.querySelectorAll(".opcion").forEach(function(op){
+    op.addEventListener("click", function(){
+      if(resueltos.has(num)) return;
+      if(op.dataset.correct === "1"){
+        op.classList.add("okk");
+        fb.textContent = "Correcto!";
+        fb.className = "feedback ok";
+        marcarResuelto(num);
+      } else {
+        op.classList.add("mall");
+        fb.textContent = "No es esa. Probá de nuevo.";
+        fb.className = "feedback mal";
+        setTimeout(function(){ op.classList.remove("mall"); }, 900);
+      }
+    });
+  });
+
+  const btnCorregir = card.querySelector("[data-corregir]");
+  if(btnCorregir){
+    btnCorregir.addEventListener("click", function(){
+      if(resueltos.has(num)) return;
+      let todosBien = true;
+      card.querySelectorAll("input.resp").forEach(function(inp){
+        if(normalizar(inp.value) === normalizar(inp.dataset.ok)){
+          inp.classList.add("okk"); inp.classList.remove("mall");
+        } else {
+          inp.classList.add("mall"); inp.classList.remove("okk");
+          todosBien = false;
+        }
+      });
+      if(todosBien){
+        fb.textContent = "Correcto!";
+        fb.className = "feedback ok";
+        marcarResuelto(num);
+      } else {
+        fb.textContent = "Hay casillas en rojo. Revisa.";
+        fb.className = "feedback mal";
+      }
+    });
+  }
+});
+
+/* ---------------- Simulador Tablas ---------------- */
+(function(){
+  const out = document.getElementById("tablas-out");
+  const btns = document.getElementById("tablas-btns");
+  for(let n = 1; n <= 10; n++){
+    const b = document.createElement("button");
+    b.textContent = String(n);
+    b.addEventListener("click", function(){
+      /* replica: delete("1.0", END) y luego insert(END, linea) por vuelta */
+      let contenido = "";
+      for(let i = 1; i <= 10; i++){
+        contenido += n + "*" + i + "=" + (n * i) + "\n";
+      }
+      out.textContent = contenido;
+    });
+    btns.appendChild(b);
+  }
+  document.getElementById("tablas-clear").addEventListener("click", function(){
+    out.textContent = "";
+  });
+})();
+
+/* ---------------- Demo animacion Canvas ---------------- */
+(function(){
+  const cv = document.getElementById("demo-canvas");
+  const ctx = cv.getContext("2d");
+  let x = 40, dir = 1, id = null;
+  const TAM = 34, ALTO = cv.height;
+
+  function pintar(){
+    ctx.clearRect(0, 0, cv.width, ALTO);
+    ctx.fillStyle = "#fb923c";
+    ctx.fillRect(x, ALTO / 2 - TAM / 2, TAM, TAM);
+    /* equivalente a: canvas.coords(sapo, x, ALTO // 2) */
+  }
+  function mover(){
+    x += 10 * dir;
+    if(x <= 0 || x >= cv.width - TAM) dir *= -1;
+    pintar();
+    id = setTimeout(mover, 60);   /* re-agenda: patron after() */
+  }
+  pintar();
+  document.getElementById("demo-ini").addEventListener("click", function(){
+    if(id === null) id = setTimeout(mover, 60);
+  });
+  document.getElementById("demo-sto").addEventListener("click", function(){
+    clearTimeout(id); id = null;
+  });
+})();
+
+/* ---------------- Resalta link activo ---------------- */
+const secciones = ["listas","tuplas","diccionarios","text-lambda","canvas","musica","basedatos","practica"];
+window.addEventListener("scroll", () => {
+  let actual = secciones[0];
+  secciones.forEach(s => {
+    if(document.getElementById(s).getBoundingClientRect().top <= 90) actual = s;
+  });
+  document.querySelectorAll("nav a").forEach(a =>
+    a.classList.toggle("activo", a.getAttribute("href") === "#" + actual));
+});
+</script>
+</body>
+</html>

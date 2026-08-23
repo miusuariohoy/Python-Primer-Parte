@@ -522,15 +522,11 @@ pygame.mixer.music.play(-<span class="nu">1</span>)                 <span class=
   <h2><span class="num">7.</span> Formulario con base de datos (MySQL)</h2>
   <p class="intro">Meta final: una ventana donde cargar un alumno (nombre +
   curso), <strong>ENVIARLO</strong> a MySQL y despues <strong>MOSTRAR</strong>
-  lo guardado. El flujo completo son tres verbos: <strong>CONECTAR</strong>
-  (abrir la puerta), <strong>ENVIAR</strong> (INSERT + commit) y
-  <strong>MOSTRAR</strong> (SELECT + fetchall). Herramientas:
-  <strong>ttk</strong> para el Combobox, <strong>messagebox</strong> para
-  avisos, y <strong>mysql.connector</strong> para hablar con la base.</p>
-
-<pre class="codigo"><span class="kw">from</span> tkinter <span class="kw">import</span> ttk             <span class="cm"># Widgets mejorados: el Combobox (lista desplegable)</span>
-<span class="kw">from</span> tkinter <span class="kw">import</span> messagebox      <span class="cm"># Ventanitas de aviso: showinfo, showwarning, showerror</span>
-<span class="kw">import</span> mysql.connector</pre>
+  lo guardado. Orden del proyecto: <strong>primero armamos el formulario</strong>
+  con Tkinter puro y lo probamos; recien despues le conectamos la base.
+  Cuando llega la BD, todo el trabajo son tres verbos:
+  <strong>CONECTAR</strong> (abrir la puerta), <strong>ENVIAR</strong>
+  (INSERT + commit) y <strong>MOSTRAR</strong> (SELECT + fetchall).</p>
 
   <table class="datos">
     <tr><th>messagebox</th><th>Cuando usarla</th><th>Icono</th></tr>
@@ -540,16 +536,77 @@ pygame.mixer.music.play(-<span class="nu">1</span>)                 <span class=
   </table>
 
 <div class="card">
-<h3>Conexion y guardado paso a paso</h3>
-<pre class="codigo"><span class="kw">def</span> <span class="fn">conectar</span>():
+<h3>PASO 1 · El formulario (solo Tkinter, sin base)</h3>
+<p class="intro">Primero construimos y probamos la VENTANA completa: caja de
+nombre, desplegable de curso, pizarra para listar y dos botones. Si esto
+funciona solo, agregarle la base despues no rompe nada.</p>
+<pre class="codigo"><span class="kw">from</span> tkinter <span class="kw">import</span> *             <span class="cm"># Tk, Label, Entry, Button, Text, END...</span>
+<span class="kw">from</span> tkinter <span class="kw">import</span> ttk           <span class="cm"># widget mejorado: el Combobox (lista desplegable)</span>
+<span class="kw">from</span> tkinter <span class="kw">import</span> messagebox    <span class="cm"># ventanitas de aviso: showinfo/showwarning/showerror</span>
+
+ventana = <span class="fn">Tk</span>()
+ventana.title(<span class="st">"Registro de alumnos"</span>)
+ventana.geometry(<span class="st">"380x420"</span>)
+
+<span class="fn">Label</span>(ventana, text=<span class="st">"Nombre del alumno:"</span>).pack()
+entrada_nombre = <span class="fn">Entry</span>(ventana)                <span class="cm"># caja para escribir el nombre</span>
+entrada_nombre.pack()
+
+<span class="fn">Label</span>(ventana, text=<span class="st">"Curso:"</span>).pack()
+combo_curso = ttk.<span class="fn">Combobox</span>(ventana, values=[<span class="st">"1A"</span>, <span class="st">"2A"</span>, <span class="st">"3A"</span>, <span class="st">"4A"</span>])
+combo_curso.<span class="fn">current</span>(<span class="nu">0</span>)                         <span class="cm"># preselecciona el primero</span>
+combo_curso.pack()
+
+texto_alumnos = <span class="fn">Text</span>(ventana, width=<span class="nu">42</span>, height=<span class="nu">10</span>)   <span class="cm"># aca listara MOSTRAR</span>
+texto_alumnos.pack(pady=<span class="nu">10</span>)
+
+<span class="fn">Button</span>(ventana, text=<span class="st">"Guardar"</span>, command=guardar).pack()
+<span class="fn">Button</span>(ventana, text=<span class="st">"Mostrar"</span>, command=mostrar).pack()
+
+ventana.<span class="fn">mainloop</span>()                             <span class="cm"># enciende la ventana</span></pre>
+  <table class="datos">
+    <tr><th>Widget</th><th>Trabajo que hace</th></tr>
+    <tr><td><code>Entry entrada_nombre</code></td><td>escribir el nombre (se lee con <code>.get()</code>)</td></tr>
+    <tr><td><code>ttk.Combobox combo_curso</code></td><td>elegir el curso de la lista, sin tipearlo</td></tr>
+    <tr><td><code>Text texto_alumnos</code></td><td>pizarra donde MOSTRAR escribira los alumnos</td></tr>
+    <tr><td><code>Button command=guardar</code></td><td>clic &rarr; ejecuta guardar() (sin parentesis!)</td></tr>
+    <tr><td><code>Button command=mostrar</code></td><td>clic &rarr; ejecuta mostrar()</td></tr>
+  </table>
+  <div class="alerta"><strong>Ojo:</strong> los botones mencionan
+  <code>guardar</code> y <code>mostrar</code>, que TODAVIA no existen. No pasa
+  nada al crear la ventana (Python las busca recien en el click)... pero si
+  clickeas antes de definirlas: <code>NameError</code>.</div>
+</div>
+
+<div class="card">
+<h3>PASO 2 · CONECTAR: def conectar()</h3>
+<p class="intro">Una funcion chiquita que devuelve la conexion abierta. Las
+demas funciones la llaman cada vez que necesitan hablar con MySQL: abren la
+puerta, usan la base y la cierran.</p>
+<pre class="codigo"><span class="kw">import</span> mysql.connector        <span class="cm"># driver: pip install mysql-connector-python</span>
+
+<span class="kw">def</span> <span class="fn">conectar</span>():
     <span class="kw">return</span> mysql.connector.connect(
         host=<span class="st">"localhost"</span>,
         user=<span class="st">"root"</span>,
         password=<span class="st">""</span>,
         database=<span class="st">"escuela"</span>
-    )
+    )</pre>
+  <table class="datos">
+    <tr><th>Dato</th><th>Valor tipico</th><th>Significado</th></tr>
+    <tr><td><code>host</code></td><td>"localhost"</td><td>donde vive MySQL: esta misma PC</td></tr>
+    <tr><td><code>user</code></td><td>"root"</td><td>usuario de MySQL</td></tr>
+    <tr><td><code>password</code></td><td>""</td><td>clave del usuario (vacia en XAMPP recien instalado)</td></tr>
+    <tr><td><code>database</code></td><td>"escuela"</td><td>a cual base entrar (debe existir antes!)</td></tr>
+  </table>
+  <div class="buenas"><strong>Por que una funcion aparte?</strong> Los datos de
+  acceso se escriben UNA sola vez. Si cambia la clave o el nombre de la base,
+  editas conectar() y todo lo demas sigue igual.</div>
+</div>
 
-<span class="kw">def</span> <span class="fn">guardar</span>():
+<div class="card">
+<h3>PASO 3 · ENVIAR: def guardar()</h3>
+<pre class="codigo"><span class="kw">def</span> <span class="fn">guardar</span>():
     nombre = entrada_nombre.get()
     curso = combo_curso.get()
 
@@ -567,15 +624,19 @@ pygame.mixer.music.play(-<span class="nu">1</span>)                 <span class=
         messagebox.<span class="fn">showinfo</span>(<span class="st">"Guardado"</span>, <span class="st">"Alumno agregado con exito"</span>)
     <span class="kw">except</span>:
         messagebox.<span class="fn">showerror</span>(<span class="st">"Error"</span>, <span class="st">"No se pudo conectar a la base"</span>)</pre>
-
-<h3>El Combobox (desplegable de ttk)</h3>
-<pre class="codigo">combo_curso = ttk.<span class="fn">Combobox</span>(ventana, values=[<span class="st">"1A"</span>, <span class="st">"2A"</span>, <span class="st">"3A"</span>, <span class="st">"4A"</span>])
-combo_curso.current(<span class="nu">0</span>)          <span class="cm"># preselecciona el primero</span>
-combo_curso.pack()</pre>
+  <ol style="padding-left:1.3rem; font-size:.93rem">
+    <li><code>.get()</code>: saca de la ventana lo que escribio/elegio el usuario.</li>
+    <li>Validacion ANTES de tocar la base; <code>return</code> corta la funcion si falta un dato.</li>
+    <li><code>try</code>: si MySQL esta apagado no rompe el programa, salta al <code>except</code> y avisa con showerror.</li>
+    <li>Pide la conexion a <code>conectar()</code> y crea el cursor: el "lapiz" que escribe sobre la base.</li>
+    <li>Los <code>%s</code> son huecos; los valores viajan en una tupla aparte (nunca concatenar strings del usuario al SQL).</li>
+    <li><code>commit()</code> confirma el cambio; sin esa linea, el INSERT se pierde.</li>
+    <li><code>close()</code> cierra la puerta y showinfo celebra.</li>
+  </ol>
 </div>
 
 <div class="card">
-<h3>MOSTRAR lo guardado (SELECT)</h3>
+<h3>PASO 4 · MOSTRAR lo guardado (SELECT)</h3>
 <p class="intro">Mismo camino que ENVIAR, con distinto final: INSERT cambia
 datos y necesita <code>commit()</code>; SELECT solo consulta y responde con
 <code>fetchall()</code>.</p>
